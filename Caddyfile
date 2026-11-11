@@ -20,6 +20,17 @@
 	root * /usr/share/caddy
 	encode zstd gzip
 	import security
+	# file_server would otherwise emit text/xml for the feed and guess the manifest.
+	@manifest path *.webmanifest
+	header @manifest {
+		Content-Type application/manifest+json
+		defer
+	}
+	@feed path /writeups/feed.xml
+	header @feed {
+		Content-Type application/atom+xml
+		defer
+	}
 	@alias host totative.ca www.totative.dev www.totative.ca
 	redir @alias https://totative.dev{uri} 301
 	@immutable path /_astro/*

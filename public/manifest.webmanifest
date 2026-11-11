@@ -1,0 +1,15 @@
+{
+  "name": "Totative",
+  "short_name": "Totative",
+  "start_url": "/",
+  "display": "browser",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ],
+  "theme_color": "#b26bff",
+  "background_color": "#0d0a14"
+}

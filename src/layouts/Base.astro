@@ -5,7 +5,7 @@ import '@fontsource-variable/atkinson-hyperlegible-mono/wght.css'
 import '../styles/e.css'
 import Brand from '../components/Brand.astro'
 import Head from '../components/Head.astro'
-import { definition, links } from '../data/site.ts'
+import { definition, links, tagline } from '../data/site.ts'
 
 interface Props {
   title?: string
@@ -17,12 +17,28 @@ interface Props {
 
 const { title, description, path = '', progress = false } = Astro.props
 const inWriteups = path.startsWith('writeups/')
+const pageTitle = title ? `${title} - Totative` : 'Totative'
+const pageDescription = description ?? tagline
+const pageUrl = new URL(path, 'https://totative.dev/').href
+const ogType = progress ? 'article' : 'website'
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <Head title={title} description={description} />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="alternate" type="application/atom+xml" title="Totative write-ups" href="/writeups/feed.xml" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Totative" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content="https://totative.dev/og.png" />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="640" />
+    <meta property="og:image:alt" content="Totative" />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
