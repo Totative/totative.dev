@@ -18,7 +18,7 @@ export async function getWriteups(): Promise<Writeup[]> {
     .map((entry) => {
       const match = NAME.exec(entry.filePath ?? '')
       const [, date, slug] = match ?? []
-      if (!date || !slug) throw new Error(`write-up "${entry.id}" is not named YYYY-MM-DD-slug.md`)
+      if (!(date && slug)) throw new Error(`write-up "${entry.id}" is not named YYYY-MM-DD-slug.md`)
       const words = (entry.body ?? '').split(/\s+/).filter(Boolean).length
       return { entry, slug, date, minutes: Math.max(1, Math.round(words / 220)) }
     })
@@ -26,5 +26,8 @@ export async function getWriteups(): Promise<Writeup[]> {
 }
 
 export async function writeupPaths() {
-  return (await getWriteups()).map((writeup) => ({ params: { slug: writeup.slug }, props: { writeup } }))
+  return (await getWriteups()).map((writeup) => ({
+    params: { slug: writeup.slug },
+    props: { writeup },
+  }))
 }

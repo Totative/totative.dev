@@ -5,7 +5,7 @@ import '@fontsource-variable/atkinson-hyperlegible-mono/wght.css'
 import '../styles/e.css'
 import Brand from '../components/Brand.astro'
 import Head from '../components/Head.astro'
-import { definition, links } from '../data/site'
+import { definition, links } from '../data/site.ts'
 import bootUrl from '../scripts/boot.js?url'
 
 interface Props {
@@ -54,7 +54,7 @@ const inWriteups = path.startsWith('writeups/')
       </div>
     </footer>
     <script>
-      import '../scripts/site'
+      import '../scripts/site.ts'
     </script>
   </body>
 </html>

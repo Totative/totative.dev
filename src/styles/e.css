@@ -259,7 +259,12 @@ html:not(.js) .hero::after {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(90deg, rgb(13 10 20 / 0.97) 0%, rgb(13 10 20 / 0.92) 38%, rgb(13 10 20 / 0) 68%);
+  background: linear-gradient(
+    90deg,
+    rgb(13 10 20 / 0.97) 0%,
+    rgb(13 10 20 / 0.92) 38%,
+    rgb(13 10 20 / 0) 68%
+  );
 }
 
 .hero-in {

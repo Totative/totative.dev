@@ -1,8 +1,8 @@
 ---
 import { render } from 'astro:content'
+import { links } from '../../data/site.ts'
 import Base from '../../layouts/Base.astro'
-import { links } from '../../data/site'
-import { type Writeup, writeupPaths } from '../../lib/writeups'
+import { type Writeup, writeupPaths } from '../../lib/writeups.ts'
 
 export const getStaticPaths = writeupPaths
 
@@ -49,5 +49,5 @@ const { Content, headings } = await render(writeup.entry)
 </Base>
 
 <script>
-  import '../../scripts/post'
+  import '../../scripts/post.ts'
 </script>

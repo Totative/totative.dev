@@ -1,7 +1,7 @@
 ---
+import { links, noWriteups } from '../../data/site.ts'
 import Base from '../../layouts/Base.astro'
-import { links, noWriteups } from '../../data/site'
-import { getWriteups } from '../../lib/writeups'
+import { getWriteups } from '../../lib/writeups.ts'
 
 const writeups = await getWriteups()
 ---

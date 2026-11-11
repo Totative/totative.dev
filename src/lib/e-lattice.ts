@@ -1,4 +1,4 @@
-import { gcd } from './totient'
+import { gcd } from './totient.ts'
 
 /** The share of lattice points in line of sight tends to this as the view grows. */
 export const SIGHT_LIMIT = 6 / Math.PI ** 2

@@ -1,8 +1,8 @@
 ---
+import { checks, links, noWriteups, reportVulnerability, services, tagline, tools } from '../data/site.ts'
 import Base from '../layouts/Base.astro'
-import { checks, links, noWriteups, reportVulnerability, services, tagline, tools } from '../data/site'
-import { SIGHT_LIMIT } from '../lib/e-lattice'
-import { getWriteups } from '../lib/writeups'
+import { SIGHT_LIMIT } from '../lib/e-lattice.ts'
+import { getWriteups } from '../lib/writeups.ts'
 
 const writeups = (await getWriteups()).slice(0, 3)
 const comma = tagline.indexOf(', ')
@@ -132,7 +132,7 @@ const [tarball, bundle, sbom] = example.assets
 </Base>
 
 <script>
-  import { mountLattice } from '../scripts/lattice'
+  import { mountLattice } from '../scripts/lattice.ts'
 
   const hero = document.querySelector<HTMLElement>('.hero')
   if (hero) mountLattice(hero)

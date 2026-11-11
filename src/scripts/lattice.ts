@@ -1,5 +1,5 @@
-import { reducedMotion } from '../lib/enhance'
-import { inSight } from '../lib/e-lattice'
+import { inSight } from '../lib/e-lattice.ts'
+import { reducedMotion } from '../lib/enhance.ts'
 
 const TAU = Math.PI * 2
 const BUCKETS = 8
@@ -22,11 +22,20 @@ export function mountLattice(hero: HTMLElement): void {
   if (canvas && eye && ctx) run(hero, canvas, eye, ctx)
 }
 
-function run(hero: HTMLElement, canvas: HTMLCanvasElement, eye: HTMLElement, ctx: CanvasRenderingContext2D): void {
+function run(
+  hero: HTMLElement,
+  canvas: HTMLCanvasElement,
+  eye: HTMLElement,
+  ctx: CanvasRenderingContext2D,
+): void {
   const say = (name: string) => hero.querySelector<HTMLElement>(`[data-say="${name}"]`)
   const out = { view: say('view'), sight: say('sight'), points: say('points'), share: say('share') }
   const style = getComputedStyle(hero)
-  const colour = { accent: style.getPropertyValue('--accent').trim(), lit: style.getPropertyValue('--lattice-lit').trim(), dim: style.getPropertyValue('--lattice-dim').trim() }
+  const colour = {
+    accent: style.getPropertyValue('--accent').trim(),
+    lit: style.getPropertyValue('--lattice-lit').trim(),
+    dim: style.getPropertyValue('--lattice-dim').trim(),
+  }
   const still = reducedMotion()
 
   let width = 0
@@ -45,7 +54,7 @@ function run(hero: HTMLElement, canvas: HTMLCanvasElement, eye: HTMLElement, ctx
   const marker: Point = { x: 0, y: 0 }
   let dirty = true
   let onScreen = true
-  let lastInput = -Infinity
+  let lastInput = Number.NEGATIVE_INFINITY
   let driftStep = 0
   let driftAt = 0
   let last = 0
@@ -221,7 +230,10 @@ function run(hero: HTMLElement, canvas: HTMLCanvasElement, eye: HTMLElement, ctx
   const lookFrom = (event: PointerEvent) => {
     lastInput = performance.now()
     const box = canvas.getBoundingClientRect()
-    moveView(Math.round((event.clientX - box.left - origin.x) / cell), Math.round((origin.y - (event.clientY - box.top)) / cell))
+    moveView(
+      Math.round((event.clientX - box.left - origin.x) / cell),
+      Math.round((origin.y - (event.clientY - box.top)) / cell),
+    )
   }
   hero.addEventListener('pointermove', lookFrom)
   hero.addEventListener('pointerdown', (event) => {
@@ -229,7 +241,12 @@ function run(hero: HTMLElement, canvas: HTMLCanvasElement, eye: HTMLElement, ctx
     if (!(event.target instanceof Element && event.target.closest('a'))) lookFrom(event)
   })
 
-  const steps: Record<string, readonly [number, number]> = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, 1], ArrowDown: [0, -1] }
+  const steps: Record<string, readonly [number, number]> = {
+    ArrowLeft: [-1, 0],
+    ArrowRight: [1, 0],
+    ArrowUp: [0, 1],
+    ArrowDown: [0, -1],
+  }
   canvas.addEventListener('keydown', (event) => {
     const step = steps[event.key]
     if (!step) return

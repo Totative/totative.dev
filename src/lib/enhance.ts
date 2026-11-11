@@ -40,7 +40,11 @@ export interface CopyOptions {
 }
 
 /** Makes `button` copy `text()` and say so for a moment. */
-export function wireCopy(button: HTMLButtonElement, text: () => string, { label = 'Copy', done = 'Copied', hold = 1500 }: CopyOptions = {}): void {
+export function wireCopy(
+  button: HTMLButtonElement,
+  text: () => string,
+  { label = 'Copy', done = 'Copied', hold = 1500 }: CopyOptions = {},
+): void {
   let timer = 0
   button.addEventListener('click', async () => {
     if (!(await copyText(text()))) return
@@ -78,12 +82,19 @@ export function addCopyButtons(root: ParentNode = document, options: CopyOptions
 /** Wires every `[data-copy]` button under `root` to copy that attribute's value. */
 export function wireCopyAttributes(root: ParentNode = document, options: CopyOptions = {}): void {
   for (const button of root.querySelectorAll<HTMLButtonElement>('button[data-copy]')) {
-    wireCopy(button, () => button.dataset['copy'] ?? '', { label: button.textContent ?? 'Copy', ...options })
+    wireCopy(button, () => button.dataset['copy'] ?? '', {
+      label: button.textContent ?? 'Copy',
+      ...options,
+    })
   }
 }
 
 /** Adds a link to itself after each heading that has an id. */
-export function addHeadingAnchors(root: ParentNode = document, symbol = '#', selector = 'h2[id], h3[id]'): void {
+export function addHeadingAnchors(
+  root: ParentNode = document,
+  symbol = '#',
+  selector = 'h2[id], h3[id]',
+): void {
   for (const heading of root.querySelectorAll<HTMLElement>(selector)) {
     if (heading.querySelector('a.anchor')) continue
     const link = document.createElement('a')
@@ -100,10 +111,16 @@ export function addHeadingAnchors(root: ParentNode = document, symbol = '#', sel
  * `aria-current="location"`. `offset` is the height, in px, that a sticky
  * header hides at the top of the viewport.
  */
-export function spyHeadings(links: Iterable<HTMLAnchorElement>, onChange?: (id: string, link: HTMLAnchorElement) => void, offset = 96): void {
+export function spyHeadings(
+  links: Iterable<HTMLAnchorElement>,
+  onChange?: (id: string, link: HTMLAnchorElement) => void,
+  offset = 96,
+): void {
   const byId = new Map<string, HTMLAnchorElement>()
   for (const link of links) byId.set(decodeURIComponent(link.hash.slice(1)), link)
-  const headings = [...byId.keys()].map((id) => document.getElementById(id)).filter((el) => el !== null)
+  const headings = [...byId.keys()]
+    .map((id) => document.getElementById(id))
+    .filter((el) => el !== null)
   if (headings.length === 0) return
   let current = ''
   const update = () => {
@@ -114,7 +131,8 @@ export function spyHeadings(links: Iterable<HTMLAnchorElement>, onChange?: (id: 
     }
     // At the very bottom the last section may never reach the top of the viewport.
     const last = headings.at(-1)
-    if (last && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) active = last.id
+    if (last && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2)
+      active = last.id
     if (active === current) return
     current = active
     for (const [id, link] of byId) {
