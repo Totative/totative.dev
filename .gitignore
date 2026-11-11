@@ -3,3 +3,4 @@ dist/
 .astro/
 scan-out/
 __pycache__/
+*.tsbuildinfo

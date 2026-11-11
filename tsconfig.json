@@ -1,5 +1,13 @@
 {
   "extends": "astro/tsconfigs/strictest",
+  "compilerOptions": {
+    "moduleDetection": "force",
+    "erasableSyntaxOnly": true,
+    "useDefineForClassFields": true,
+    "noUncheckedSideEffectImports": true,
+    "allowJs": false,
+    "incremental": true
+  },
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist"]
 }
