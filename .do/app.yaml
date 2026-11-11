@@ -12,12 +12,12 @@ services:
     http_port: 8080
     health_check:
       http_path: /
-    domains:
-      - domain: totative.dev
-        type: PRIMARY
-      - domain: www.totative.dev
-        type: ALIAS
-      - domain: totative.ca
-        type: ALIAS
-      - domain: www.totative.ca
-        type: ALIAS
+domains:
+  - domain: totative.dev
+    type: PRIMARY
+  - domain: www.totative.dev
+    type: ALIAS
+  - domain: totative.ca
+    type: ALIAS
+  - domain: www.totative.ca
+    type: ALIAS
