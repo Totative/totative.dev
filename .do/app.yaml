@@ -1,0 +1,23 @@
+name: totative-dev
+region: tor1
+services:
+  - name: web
+    github:
+      repo: Totative/totative.dev
+      branch: main
+      deploy_on_push: true
+    dockerfile_path: Dockerfile
+    instance_count: 1
+    instance_size_slug: apps-s-1vcpu-0.5gb
+    http_port: 8080
+    health_check:
+      http_path: /
+    domains:
+      - domain: totative.dev
+        type: PRIMARY
+      - domain: www.totative.dev
+        type: ALIAS
+      - domain: totative.ca
+        type: ALIAS
+      - domain: www.totative.ca
+        type: ALIAS
