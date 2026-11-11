@@ -28,7 +28,9 @@ export async function copyText(text: string): Promise<boolean> {
   area.select()
   const ok = document.execCommand('copy')
   area.remove()
-  if (focused instanceof HTMLElement) focused.focus({ preventScroll: true })
+  if (focused instanceof HTMLElement) {
+    focused.focus({ preventScroll: true })
+  }
   return ok
 }
 
@@ -39,21 +41,25 @@ export interface CopyOptions {
   hold?: number
 }
 
+const COPIED_HOLD_MS = 1500
+
 /** Makes `button` copy `text()` and say so for a moment. */
 export function wireCopy(
   button: HTMLButtonElement,
   text: () => string,
-  { label = 'Copy', done = 'Copied', hold = 1500 }: CopyOptions = {},
+  { label = 'Copy', done = 'Copied', hold = COPIED_HOLD_MS }: CopyOptions = {},
 ): void {
   let timer = 0
   button.addEventListener('click', async () => {
-    if (!(await copyText(text()))) return
+    if (!(await copyText(text()))) {
+      return
+    }
     button.textContent = done
-    button.dataset['copied'] = ''
+    button.dataset.copied = ''
     clearTimeout(timer)
-    timer = window.setTimeout(() => {
+    timer = globalThis.setTimeout(() => {
       button.textContent = label
-      delete button.dataset['copied']
+      button.removeAttribute('data-copied')
     }, hold)
   })
 }
@@ -64,11 +70,15 @@ export function wireCopy(
  */
 export function addCopyButtons(root: ParentNode = document, options: CopyOptions = {}): void {
   for (const pre of root.querySelectorAll('pre')) {
-    if (pre.parentElement?.classList.contains('code')) continue
+    if (pre.parentElement?.classList.contains('code')) {
+      continue
+    }
     const frame = document.createElement('div')
     frame.className = 'code'
-    const lang = pre.dataset['language']
-    if (lang) frame.dataset['lang'] = lang
+    const lang = pre.dataset.language
+    if (lang) {
+      frame.dataset.lang = lang
+    }
     const button = document.createElement('button')
     button.type = 'button'
     button.className = 'copy'
@@ -82,7 +92,7 @@ export function addCopyButtons(root: ParentNode = document, options: CopyOptions
 /** Wires every `[data-copy]` button under `root` to copy that attribute's value. */
 export function wireCopyAttributes(root: ParentNode = document, options: CopyOptions = {}): void {
   for (const button of root.querySelectorAll<HTMLButtonElement>('button[data-copy]')) {
-    wireCopy(button, () => button.dataset['copy'] ?? '', {
+    wireCopy(button, () => button.dataset.copy ?? '', {
       label: button.textContent ?? 'Copy',
       ...options,
     })
@@ -96,7 +106,9 @@ export function addHeadingAnchors(
   selector = 'h2[id], h3[id]',
 ): void {
   for (const heading of root.querySelectorAll<HTMLElement>(selector)) {
-    if (heading.querySelector('a.anchor')) continue
+    if (heading.querySelector('a.anchor')) {
+      continue
+    }
     const link = document.createElement('a')
     link.className = 'anchor'
     link.href = `#${heading.id}`
@@ -106,6 +118,10 @@ export function addHeadingAnchors(
   }
 }
 
+const HASH_PREFIX = 1
+const STICKY_HEADER_OFFSET = 96
+const BOTTOM_SLACK = 2
+
 /**
  * Marks the table-of-contents link for the section being read with
  * `aria-current="location"`. `offset` is the height, in px, that a sticky
@@ -114,33 +130,51 @@ export function addHeadingAnchors(
 export function spyHeadings(
   links: Iterable<HTMLAnchorElement>,
   onChange?: (id: string, link: HTMLAnchorElement) => void,
-  offset = 96,
+  offset = STICKY_HEADER_OFFSET,
 ): void {
   const byId = new Map<string, HTMLAnchorElement>()
-  for (const link of links) byId.set(decodeURIComponent(link.hash.slice(1)), link)
+  for (const link of links) {
+    byId.set(decodeURIComponent(link.hash.slice(HASH_PREFIX)), link)
+  }
   const headings = [...byId.keys()]
     .map((id) => document.getElementById(id))
     .filter((el) => el !== null)
-  if (headings.length === 0) return
+  if (headings.length === 0) {
+    return
+  }
   let current = ''
   const update = () => {
     let active = ''
     for (const heading of headings) {
-      if (heading.getBoundingClientRect().top - offset > 1) break
+      if (heading.getBoundingClientRect().top - offset > 1) {
+        break
+      }
       active = heading.id
     }
     // At the very bottom the last section may never reach the top of the viewport.
     const last = headings.at(-1)
-    if (last && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2)
+    if (
+      last &&
+      globalThis.innerHeight + globalThis.scrollY >=
+        document.documentElement.scrollHeight - BOTTOM_SLACK
+    ) {
       active = last.id
-    if (active === current) return
+    }
+    if (active === current) {
+      return
+    }
     current = active
     for (const [id, link] of byId) {
-      if (id === active) link.setAttribute('aria-current', 'location')
-      else link.removeAttribute('aria-current')
+      if (id === active) {
+        link.setAttribute('aria-current', 'location')
+      } else {
+        link.removeAttribute('aria-current')
+      }
     }
     const link = byId.get(active)
-    if (link) onChange?.(active, link)
+    if (link) {
+      onChange?.(active, link)
+    }
   }
   addEventListener('scroll', update, { passive: true })
   addEventListener('resize', update)
@@ -151,7 +185,7 @@ export function spyHeadings(
 export function onReadingProgress(target: Element, update: (fraction: number) => void): void {
   const measure = () => {
     const box = target.getBoundingClientRect()
-    const span = box.height - window.innerHeight
+    const span = box.height - globalThis.innerHeight
     update(span <= 0 ? 1 : Math.min(1, Math.max(0, -box.top / span)))
   }
   addEventListener('scroll', measure, { passive: true })

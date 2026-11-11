@@ -4,7 +4,10 @@ import Base from '../layouts/Base.astro'
 import { SIGHT_LIMIT } from '../lib/e-lattice.ts'
 import { getWriteups } from '../lib/writeups.ts'
 
-const writeups = (await getWriteups()).slice(0, 3)
+const LATEST_COUNT = 3
+const SHARE_DIGITS = 3
+const copyLabel = 'Copy'
+const writeups = (await getWriteups()).slice(0, LATEST_COUNT)
 const comma = tagline.indexOf(', ')
 const lead = comma === -1 ? tagline : tagline.slice(0, comma)
 const rest = comma === -1 ? '' : tagline.slice(comma + 2)
@@ -23,13 +26,15 @@ const [tarball, bundle, sbom] = example.assets
           <a class="btn btn-quiet" href={links.disclosure}>Disclosure policy</a>
         </p>
       </div>
-      <canvas tabindex="0" role="application" aria-label="Lattice. Arrow keys move the viewpoint." aria-describedby="lattice-note"></canvas>
+      <div role="application" aria-label="Lattice. Arrow keys move the viewpoint." aria-describedby="lattice-note">
+        <canvas tabindex="0"></canvas>
+      </div>
       <div class="hero-eye" aria-hidden="true"></div>
       <div class="hero-note">
         <p id="lattice-note">Each lit dot is in line of sight from the ringed point: their two offsets share no factor but 1.</p>
         <p class="live">
           From <span data-say="view">(0, 0)</span>, <span data-say="sight"></span> of <span data-say="points"></span> dots are in sight, a share of <span data-say="share"
-          ></span>; the limit is 6/π², about {SIGHT_LIMIT.toFixed(3)}.
+          ></span>; the limit is 6/π², about {SIGHT_LIMIT.toFixed(SHARE_DIGITS)}.
         </p>
       </div>
     </div>
@@ -66,7 +71,7 @@ const [tarball, bundle, sbom] = example.assets
               <p class="cmd">
                 <code>{tool.install}</code>
                 <button type="button" data-copy={tool.install}>
-                  Copy
+                  {copyLabel}
                 </button>
               </p>
             </li>
@@ -84,7 +89,7 @@ const [tarball, bundle, sbom] = example.assets
         <p class="example">For example, {example.name} {example.version}:</p>
         <p class="cmd">
           <code>{exampleCheck}</code>
-          <button type="button" data-copy={exampleCheck}>Copy</button>
+          <button type="button" data-copy={exampleCheck}>{copyLabel}</button>
         </p>
         <p class="files">
           Each release carries three files: the source tarball ({tarball}), its provenance bundle ({bundle}) and the SBOM ({sbom}).
@@ -105,7 +110,8 @@ const [tarball, bundle, sbom] = example.assets
                   </h3>
                   <p>{writeup.entry.data.description}</p>
                   <p class="meta">
-                    <time datetime={writeup.date}>{writeup.date}</time>, {writeup.minutes} min read
+                    <time datetime={writeup.date}>{writeup.date}</time>
+                    {`, ${writeup.minutes} min read`}
                   </p>
                 </li>
               ))}
@@ -135,5 +141,7 @@ const [tarball, bundle, sbom] = example.assets
   import { mountLattice } from '../scripts/lattice.ts'
 
   const hero = document.querySelector<HTMLElement>('.hero')
-  if (hero) mountLattice(hero)
+  if (hero) {
+    mountLattice(hero)
+  }
 </script>

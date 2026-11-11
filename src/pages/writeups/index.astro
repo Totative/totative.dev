@@ -22,7 +22,8 @@ const writeups = await getWriteups()
               </h2>
               <p>{writeup.entry.data.description}</p>
               <p class="meta">
-                <time datetime={writeup.date}>{writeup.date}</time>, {writeup.minutes} min read
+                <time datetime={writeup.date}>{writeup.date}</time>
+                {`, ${writeup.minutes} min read`}
               </p>
             </li>
           ))}

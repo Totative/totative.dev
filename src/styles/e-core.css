@@ -1,0 +1,218 @@
+:root {
+  --bg: #0d0a14;
+  --surface: #130e1c;
+  --line: #211a2e;
+  --line-strong: #3a2e50;
+  --ink: #f2eef8;
+  --soft: #c8bfd6;
+  --muted: #9a90ab;
+  --accent: #b26bff;
+  --on-accent: #14061f;
+  --lattice-lit: #c9b2e6;
+  --lattice-dim: #221a30;
+  --code-keyword: #d3b0ff;
+  --code-function: #f2eef8;
+  --code-string: #c6b5e0;
+  --code-constant: #b69be0;
+  --code-muted: #857a99;
+  --sans: "Atkinson Hyperlegible Next Variable", system-ui, sans-serif;
+  --mono: "Atkinson Hyperlegible Mono Variable", ui-monospace, monospace;
+}
+
+@view-transition {
+  navigation: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
+html {
+  scroll-padding-top: 32px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  font: 400 1.0625rem / 1.6 var(--sans);
+  color: var(--soft);
+}
+
+main {
+  flex: 1;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+h2 {
+  font-size: 1.75rem;
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+a {
+  color: var(--ink);
+  text-decoration-color: var(--muted);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  text-decoration-color: var(--accent);
+}
+
+code,
+pre {
+  font-family: var(--mono);
+}
+
+code {
+  font-size: 0.875em;
+  color: var(--ink);
+}
+
+pre code {
+  font-size: inherit;
+}
+
+.shell {
+  width: 100%;
+  max-width: 1168px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.skip {
+  position: absolute;
+  left: 16px;
+  top: 40px;
+  z-index: 100;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background: var(--ink);
+  color: var(--bg);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-200px);
+}
+
+.skip:focus {
+  transform: none;
+}
+
+/* Buttons: the accent belongs to the one primary action. */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 20px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
+}
+
+.btn:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.btn-quiet {
+  background: transparent;
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+.btn-quiet:hover {
+  background: transparent;
+  border-color: var(--ink);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Header */
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: 72px;
+}
+
+.logo .brand {
+  height: 34px;
+  width: auto;
+}
+
+.head nav {
+  display: flex;
+  gap: 32px;
+}
+
+.head nav a {
+  color: var(--soft);
+  font-size: 0.9375rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.head nav a:hover,
+.head nav a[aria-current],
+.head nav a:last-child {
+  color: var(--ink);
+}
+
+.head nav a[aria-current] {
+  text-decoration: underline;
+  text-decoration-color: var(--muted);
+  text-underline-offset: 6px;
+}
+
+.head nav a:last-child {
+  font-weight: 600;
+}

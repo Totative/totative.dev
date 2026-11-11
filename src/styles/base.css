@@ -99,10 +99,3 @@ pre {
     scrollbar-color: var(--line) transparent;
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
-    scroll-behavior: auto !important;
-  }
-}

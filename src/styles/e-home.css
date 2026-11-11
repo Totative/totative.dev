@@ -1,0 +1,294 @@
+/* Hero */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  min-height: clamp(520px, calc(100svh - 104px), 740px);
+  display: grid;
+}
+
+/* The field dissolves into the page at its top and bottom edge instead of ending on a line. */
+.hero canvas {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  mask-image: linear-gradient(transparent, #000 14%, #000 78%, transparent);
+  touch-action: pan-y;
+}
+
+.hero canvas:focus-visible {
+  outline-offset: -4px;
+}
+
+@media (scripting: none) {
+  .hero::after {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    mask-image: linear-gradient(transparent, #000 14%, #000 78%, transparent);
+    content: "";
+    background: radial-gradient(circle, var(--lattice-dim) 1px, transparent 1.5px) 0 0 / 30px 30px;
+  }
+}
+
+/* Keeps the lit field dim behind the headline. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgb(13 10 20 / 0.97) 0%,
+    rgb(13 10 20 / 0.92) 38%,
+    rgb(13 10 20 / 0) 68%
+  );
+}
+
+.hero-in {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding-block: 40px 56px;
+}
+
+.hero-copy {
+  align-self: center;
+  max-width: 43rem;
+}
+
+.hero h1 {
+  font-size: clamp(2.125rem, 4.7vw, 4.25rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.022em;
+  color: var(--soft);
+}
+
+.hero h1 strong {
+  font-weight: 400;
+}
+
+.hero .actions {
+  margin-top: 36px;
+}
+
+.hero-eye {
+  position: absolute;
+  left: 74%;
+  top: 44%;
+  width: 1px;
+  height: 1px;
+}
+
+.hero-note {
+  max-width: 46rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.live {
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (scripting: none) {
+  .live {
+    display: none;
+  }
+}
+
+/* Sections: one pattern, heading on the left, content on the right. */
+
+.block {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: 24px 48px;
+  padding-block: 72px;
+  border-top: 1px solid var(--line);
+}
+
+.block:first-child {
+  border-top: 0;
+}
+
+.block:last-child {
+  padding-bottom: 104px;
+}
+
+.block p {
+  max-width: 40rem;
+}
+
+.services {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px 48px;
+}
+
+.services p {
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.tools {
+  display: grid;
+  gap: 40px;
+}
+
+.tools h3 {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 4px;
+}
+
+.tools h3 a:first-child,
+.posts h2 a,
+.posts h3 a {
+  text-decoration: none;
+}
+
+.tools h3 a:first-child:hover,
+.posts h2 a:hover,
+.posts h3 a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+}
+
+.version {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  font-weight: 400;
+}
+
+.cmd {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 14px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.cmd code {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.cmd button,
+.copy {
+  flex: none;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: 400 0.875rem / 1.5 var(--sans);
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.cmd button:hover,
+.copy:hover,
+.cmd button[data-copied],
+.copy[data-copied] {
+  color: var(--ink);
+}
+
+.checks,
+.prose ul {
+  padding-left: 1.15em;
+  list-style: disc;
+}
+
+.checks li + li,
+.prose li + li {
+  margin-top: 10px;
+}
+
+.checks li::marker,
+.prose li::marker {
+  color: var(--muted);
+}
+
+.example {
+  margin-top: 32px;
+}
+
+.files {
+  margin-top: 14px;
+  font-size: 0.9375rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.posts li + li {
+  margin-top: 40px;
+}
+
+.posts h2,
+.posts h3 {
+  margin-bottom: 8px;
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.posts p {
+  max-width: 40rem;
+}
+
+.meta {
+  margin-top: 8px;
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+
+.more {
+  margin-top: 24px;
+}
+
+.block .actions {
+  margin-top: 24px;
+}
+
+/* Footer */
+
+.foot {
+  padding-block: 40px 64px;
+  border-top: 1px solid var(--line);
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+
+.foot p {
+  max-width: 40rem;
+}
+
+.foot nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  margin-top: 20px;
+}
+
+.foot nav a {
+  color: var(--soft);
+  text-decoration: none;
+}
+
+.foot nav a:hover {
+  color: var(--ink);
+}

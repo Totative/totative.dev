@@ -1,4 +1,10 @@
 export function gcd(a: number, b: number): number {
-  while (b !== 0) [a, b] = [b, a % b]
-  return a
+  let x = a
+  let y = b
+  while (y !== 0) {
+    const next = x % y
+    x = y
+    y = next
+  }
+  return x
 }

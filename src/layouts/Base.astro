@@ -6,7 +6,6 @@ import '../styles/e.css'
 import Brand from '../components/Brand.astro'
 import Head from '../components/Head.astro'
 import { definition, links } from '../data/site.ts'
-import bootUrl from '../scripts/boot.js?url'
 
 interface Props {
   title?: string
@@ -24,7 +23,6 @@ const inWriteups = path.startsWith('writeups/')
 <html lang="en">
   <head>
     <Head title={title} description={description} />
-    <script is:inline src={bootUrl}></script>
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
