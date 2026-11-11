@@ -4,3 +4,4 @@ dist/
 scan-out/
 __pycache__/
 *.tsbuildinfo
+.lighthouseci/
