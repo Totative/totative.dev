@@ -2,6 +2,7 @@
 @import "./e-core.css";
 @import "./e-home.css";
 @import "./e-writeups.css";
+@import "./e-brand.css";
 
 @media (prefers-reduced-motion: reduce) {
   .btn,

@@ -21,4 +21,4 @@ No inline script, inline style, or `style` attributes, ever. Astro is configured
 
 ## Layout
 
-Lattice is the site. `src/pages/index.astro` is home, write-ups are `/writeups/` and `/writeups/<slug>/`, layout is `src/layouts/Base.astro`. Copy lives in `src/data/site.ts` and `src/content/writeups/`.
+Lattice is the site. `src/pages/index.astro` is home, write-ups are `/writeups/` and `/writeups/<slug>/`, `src/pages/brand.astro` is `/brand/` (its logo files in `public/brand/` are copies of the `Totative/.github` repo's `profile/assets/`), layout is `src/layouts/Base.astro`. Copy lives in `src/data/site.ts` and `src/content/writeups/`.

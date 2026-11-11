@@ -16,6 +16,7 @@ PAGES = [
     "/",
     "/writeups/",
     "/writeups/checking-a-totative-release/",
+    "/brand/",
 ]
 VIEWPORTS = {"desktop": (1440, 900), "phone": (390, 844)}
 IDLE_SECONDS = 15

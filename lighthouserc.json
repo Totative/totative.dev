@@ -4,7 +4,8 @@
       "url": [
         "http://127.0.0.1:8080/",
         "http://127.0.0.1:8080/writeups/",
-        "http://127.0.0.1:8080/writeups/checking-a-totative-release/"
+        "http://127.0.0.1:8080/writeups/checking-a-totative-release/",
+        "http://127.0.0.1:8080/brand/"
       ],
       "numberOfRuns": 1,
       "settings": {
