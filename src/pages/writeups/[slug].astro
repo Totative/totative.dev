@@ -1,8 +1,8 @@
 ---
 import { render } from 'astro:content'
-import E from '../../../layouts/E.astro'
-import { links } from '../../../data/site'
-import { type Writeup, writeupPaths } from '../../../lib/writeups'
+import Base from '../../layouts/Base.astro'
+import { links } from '../../data/site'
+import { type Writeup, writeupPaths } from '../../lib/writeups'
 
 export const getStaticPaths = writeupPaths
 
@@ -15,10 +15,10 @@ const { title, description } = writeup.entry.data
 const { Content, headings } = await render(writeup.entry)
 ---
 
-<E title={title} description={description} path={`writeups/${writeup.slug}/`} progress>
+<Base title={title} description={description} path={`writeups/${writeup.slug}/`} progress>
   <article class="shell page post" data-progress>
     <header class="page-head">
-      <p class="crumb"><a href="/e/writeups/">Write-ups</a></p>
+      <p class="crumb"><a href="/writeups/">Write-ups</a></p>
       <h1>{title}</h1>
       <p class="lede">{description}</p>
       <p class="meta"><time datetime={writeup.date}>{writeup.date}</time>, {writeup.minutes} min read</p>
@@ -43,11 +43,11 @@ const { Content, headings } = await render(writeup.entry)
     <footer class="post-end">
       <a class="btn" href={links.policy}>Report a vulnerability</a>
       <a class="btn btn-quiet" href={links.disclosure}>Disclosure policy</a>
-      <a href="/e/writeups/">All write-ups</a>
+      <a href="/writeups/">All write-ups</a>
     </footer>
   </article>
-</E>
+</Base>
 
 <script>
-  import '../../../scripts/e/post'
+  import '../../scripts/post'
 </script>

@@ -1,5 +1,5 @@
-import { reducedMotion } from '../../lib/enhance'
-import { inSight } from '../../lib/e-lattice'
+import { reducedMotion } from '../lib/enhance'
+import { inSight } from '../lib/e-lattice'
 
 const TAU = Math.PI * 2
 const BUCKETS = 8

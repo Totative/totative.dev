@@ -1,5 +1,4 @@
-// Browser-side helpers the designs share. Each design decides the markup and
-// the look; these only carry the behaviour that is the same everywhere.
+// Copy, heading anchors, and reading progress used by the site scripts.
 
 export const reducedMotion = (): boolean => matchMedia('(prefers-reduced-motion: reduce)').matches
 

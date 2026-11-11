@@ -1,4 +1,4 @@
-import { addCopyButtons, addHeadingAnchors, spyHeadings } from '../../lib/enhance'
+import { addCopyButtons, addHeadingAnchors, spyHeadings } from '../lib/enhance'
 
 const prose = document.querySelector<HTMLElement>('.prose')
 if (prose) {

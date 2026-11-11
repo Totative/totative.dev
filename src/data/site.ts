@@ -76,7 +76,7 @@ export const tools = [
 	}),
 ] as const;
 
-export const verifyCommand = "gh attestation verify <file> --owner Totative";
+const verifyCommand = "gh attestation verify <file> --owner Totative";
 
 export const checks = [
 	`Releases are built in CI and carry signed provenance and an SBOM. Verify any of them with <code>${verifyCommand.replace("<", "&lt;").replace(">", "&gt;")}</code>.`,
@@ -91,8 +91,3 @@ export const definition =
 	"A <strong>totative</strong> of <em>n</em> is a positive integer up to <em>n</em> that shares no factor with it other than 1. Euler’s totient function counts them; RSA is built on it.";
 
 export const noWriteups = `No write-ups published yet. Advisories appear on GitHub first: <a href="${links.advisories}">GitHub advisories</a>`;
-
-// The letters are the ones the two designs had among the first eight.
-export const designs = [{ id: "e", name: "Lattice" }] as const;
-
-export type DesignId = (typeof designs)[number]["id"];

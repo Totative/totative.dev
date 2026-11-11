@@ -1,8 +1,9 @@
-"""Runtime behaviour scan of the built site, served by `astro preview`.
+"""Runtime behaviour scan of the built site, served by `astro preview` or the container.
 
 usage: scan_runtime.py BASE_URL OUT_DIR
 Writes runtime.json (raw) and runtime.txt (summary) into OUT_DIR.
 """
+
 import json
 import sys
 from typing import Any
@@ -13,17 +14,16 @@ from playwright.sync_api import Error as PlaywrightError
 
 PAGES = [
     "/",
-    "/e/",
-    "/e/writeups/",
-    "/e/writeups/checking-a-totative-release/",
-    "/lab/f-animation/",
+    "/writeups/",
+    "/writeups/checking-a-totative-release/",
 ]
 VIEWPORTS = {"desktop": (1440, 900), "phone": (390, 844)}
 IDLE_SECONDS = 15
 CPU_FLAG = 0.20
 CSP = (
     "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; "
-    "connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"
+    "connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; "
+    "upgrade-insecure-requests"
 )
 
 INIT_SCRIPT = r"""
@@ -113,20 +113,17 @@ def use_control(page: Page, path: str) -> str:
         loc = page.locator(selector)
         return loc.first if loc.count() else None
 
-    if path == "/e/":
+    if path == "/":
         canvas = first(".hero canvas")
         if canvas:
             canvas.focus()
             page.keyboard.press("ArrowRight")
             box = canvas.bounding_box()
             if box:
-                page.mouse.click(box["x"] + box["width"] * 0.6, box["y"] + box["height"] * 0.4)
+                page.mouse.click(
+                    box["x"] + box["width"] * 0.6, box["y"] + box["height"] * 0.4
+                )
             return "lattice: arrow key and click on the canvas"
-    if path == "/lab/f-animation/":
-        play = first("[data-dial-play]")
-        if play:
-            play.click()
-            return "dial: play/pause"
     if path.startswith("/") and path != "/":
         copy = first("button[data-copy], .prose .code .copy")
         if copy:
@@ -144,9 +141,12 @@ def use_control(page: Page, path: str) -> str:
 
 
 def new_context(browser: Any, viewport: tuple[int, int], csp: bool) -> BrowserContext:
-    ctx = browser.new_context(viewport={"width": viewport[0], "height": viewport[1]}, accept_downloads=True)
+    ctx = browser.new_context(
+        viewport={"width": viewport[0], "height": viewport[1]}, accept_downloads=True
+    )
     ctx.add_init_script(INIT_SCRIPT)
     if csp:
+
         def add_csp(route: Route) -> None:
             resp = route.fetch()
             headers = dict(resp.headers)
@@ -158,7 +158,9 @@ def new_context(browser: Any, viewport: tuple[int, int], csp: bool) -> BrowserCo
     return ctx
 
 
-def run_page(browser: Any, base: str, path: str, vp_name: str, csp: bool) -> dict[str, Any]:
+def run_page(
+    browser: Any, base: str, path: str, vp_name: str, csp: bool
+) -> dict[str, Any]:
     origin = urlparse(base).netloc
     ctx = new_context(browser, VIEWPORTS[vp_name], csp)
     page = ctx.new_page()
@@ -170,7 +172,14 @@ def run_page(browser: Any, base: str, path: str, vp_name: str, csp: bool) -> dic
     popups: list[str] = []
     ws: list[str] = []
     page.on("request", lambda r: requests.append(r.url))
-    page.on("console", lambda m: console.append(f"{m.type}: {m.text}") if m.type in ("error", "warning") else None)
+    page.on(
+        "console",
+        lambda m: (
+            console.append(f"{m.type}: {m.text}")
+            if m.type in ("error", "warning")
+            else None
+        ),
+    )
     page.on("pageerror", lambda e: console.append(f"pageerror: {e}"))
     page.on("download", lambda d: downloads.append(d.suggested_filename))
     page.on("websocket", lambda w: ws.append(w.url))
@@ -181,7 +190,11 @@ def run_page(browser: Any, base: str, path: str, vp_name: str, csp: bool) -> dic
     cdp.send("Performance.enable")
 
     def metric(name: str) -> float:
-        return next(m["value"] for m in cdp.send("Performance.getMetrics")["metrics"] if m["name"] == name)
+        return next(
+            m["value"]
+            for m in cdp.send("Performance.getMetrics")["metrics"]
+            if m["name"] == name
+        )
 
     if not csp:
         t0, w0 = metric("TaskDuration"), metric("Timestamp")
@@ -195,7 +208,13 @@ def run_page(browser: Any, base: str, path: str, vp_name: str, csp: bool) -> dic
     result["fingerprint_calls"] = scan["fp"]
     result["api_calls"] = scan["api"]
     result["csp_violations"] = scan.get("csp", [])
-    result["third_party_requests"] = sorted({u for u in requests if urlparse(u).netloc != origin and not u.startswith(("data:", "blob:"))})
+    result["third_party_requests"] = sorted(
+        {
+            u
+            for u in requests
+            if urlparse(u).netloc != origin and not u.startswith(("data:", "blob:"))
+        }
+    )
     result["all_requests"] = len(requests)
     result["frames"] = [f.url for f in page.frames[1:]]
     result["iframes_in_dom"] = page.locator("iframe").count()
@@ -213,12 +232,16 @@ def summarize(results: list[dict[str, Any]]) -> str:
     for r in results:
         tag = f"{r['page']} [{r['viewport']}{', CSP' if r['csp_mode'] else ''}]"
         lines.append(tag)
-        lines.append(f"  interaction: {r['interaction']}; requests: {r['all_requests']}")
+        lines.append(
+            f"  interaction: {r['interaction']}; requests: {r['all_requests']}"
+        )
         if r["third_party_requests"]:
             lines.append(f"  THIRD-PARTY: {r['third_party_requests']}")
         if "cpu_idle_share" in r:
             flag = "  FLAG >20%" if r["cpu_idle_share"] > CPU_FLAG else ""
-            lines.append(f"  cpu idle {IDLE_SECONDS}s: {r['cpu_idle_share'] * 100:.1f}% workers={len(r['workers'])}{flag}")
+            lines.append(
+                f"  cpu idle {IDLE_SECONDS}s: {r['cpu_idle_share'] * 100:.1f}% workers={len(r['workers'])}{flag}"
+            )
         for key in ("fingerprint_calls", "api_calls"):
             counts: dict[str, int] = {}
             for c in r[key]:
@@ -226,7 +249,14 @@ def summarize(results: list[dict[str, Any]]) -> str:
                 counts[k] = counts.get(k, 0) + 1
             for k, n in counts.items():
                 lines.append(f"  {key}: {k} x{n}")
-        for key in ("csp_violations", "console", "downloads", "popups", "websockets", "frames"):
+        for key in (
+            "csp_violations",
+            "console",
+            "downloads",
+            "popups",
+            "websockets",
+            "frames",
+        ):
             for item in r[key]:
                 lines.append(f"  {key}: {item}")
         if r["service_workers"]:

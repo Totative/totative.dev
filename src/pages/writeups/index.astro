@@ -1,12 +1,12 @@
 ---
-import E from '../../../layouts/E.astro'
-import { links, noWriteups } from '../../../data/site'
-import { getWriteups } from '../../../lib/writeups'
+import Base from '../../layouts/Base.astro'
+import { links, noWriteups } from '../../data/site'
+import { getWriteups } from '../../lib/writeups'
 
 const writeups = await getWriteups()
 ---
 
-<E title="Write-ups" description="Totative research write-ups and advisories." path="writeups/">
+<Base title="Write-ups" description="Totative research write-ups and advisories." path="writeups/">
   <div class="shell page">
     <header class="page-head">
       <h1>Write-ups</h1>
@@ -18,7 +18,7 @@ const writeups = await getWriteups()
           {writeups.map((writeup) => (
             <li>
               <h2>
-                <a href={`/e/writeups/${writeup.slug}/`}>{writeup.entry.data.title}</a>
+                <a href={`/writeups/${writeup.slug}/`}>{writeup.entry.data.title}</a>
               </h2>
               <p>{writeup.entry.data.description}</p>
               <p class="meta">
@@ -32,4 +32,4 @@ const writeups = await getWriteups()
       )
     }
   </div>
-</E>
+</Base>

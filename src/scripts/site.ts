@@ -1,4 +1,4 @@
-import { onReadingProgress, wireCopyAttributes } from '../../lib/enhance'
+import { onReadingProgress, wireCopyAttributes } from '../lib/enhance'
 
 const bar = document.querySelector<HTMLElement>('.progress')
 const article = document.querySelector('[data-progress]')
