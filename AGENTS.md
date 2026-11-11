@@ -13,7 +13,7 @@ bun run preview
 bun run scan
 ```
 
-`scan` expects a preview (or the container) already running; it does not start one. TypeScript stays on 6 until `astro check` supports 7.
+`scan` expects a preview (or the container) already running; it does not start one. `check` runs `astro-check` through `bunx` with its own TypeScript 6, because it needs the JavaScript compiler API that TypeScript 7 does not ship; the project itself is on 7.
 
 ## CSP
 
