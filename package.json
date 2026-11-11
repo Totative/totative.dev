@@ -7,7 +7,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "lint": "biome check --error-on-warnings .",
-    "typecheck": "tsc -b --noEmit --pretty false",
+    "typecheck": "astro sync && tsc -b --noEmit --pretty false",
     "check": "astro check",
     "scan": "mkdir -p scan-out && uv run --with playwright python scripts/scan_runtime.py http://127.0.0.1:4321 scan-out"
   },
