@@ -49,7 +49,7 @@ export function wireCopy(
   text: () => string,
   { label = 'Copy', done = 'Copied', hold = COPIED_HOLD_MS }: CopyOptions = {},
 ): void {
-  let timer = 0
+  let timer: ReturnType<typeof setTimeout> | undefined
   button.addEventListener('click', async () => {
     if (!(await copyText(text()))) {
       return
@@ -57,7 +57,7 @@ export function wireCopy(
     button.textContent = done
     button.dataset.copied = ''
     clearTimeout(timer)
-    timer = globalThis.setTimeout(() => {
+    timer = setTimeout(() => {
       button.textContent = label
       button.removeAttribute('data-copied')
     }, hold)
