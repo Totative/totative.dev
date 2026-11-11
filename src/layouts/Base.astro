@@ -5,9 +5,7 @@ import '@fontsource-variable/atkinson-hyperlegible-mono/wght.css'
 import '../styles/e.css'
 import Brand from '../components/Brand.astro'
 import Head from '../components/Head.astro'
-import MockBar from '../components/MockBar.astro'
-import { definition, links } from '../data/site'
-import bootUrl from '../scripts/e/boot.js?url'
+import { definition, links } from '../data/site.ts'
 
 interface Props {
   title?: string
@@ -25,16 +23,14 @@ const inWriteups = path.startsWith('writeups/')
 <html lang="en">
   <head>
     <Head title={title} description={description} />
-    <script is:inline src={bootUrl}></script>
   </head>
   <body>
-    <MockBar current="e" path={path} />
     <a class="skip" href="#main">Skip to content</a>
     {progress && <div class="progress" aria-hidden="true" />}
     <header class="head shell">
-      <a class="logo" href="/e/" aria-label="Totative home"><Brand kind="wordmark" /></a>
+      <a class="logo" href="/" aria-label="Totative home"><Brand kind="wordmark" /></a>
       <nav aria-label="Site">
-        <a href="/e/writeups/" aria-current={inWriteups ? 'page' : undefined}>Write-ups</a>
+        <a href="/writeups/" aria-current={inWriteups ? 'page' : undefined}>Write-ups</a>
         <a class="wide" href={links.policy}>Report a vulnerability</a>
         <a class="wide" href={links.github}>GitHub</a>
         <a href={links.disclosure}>Disclosure policy</a>
@@ -47,7 +43,7 @@ const inWriteups = path.startsWith('writeups/')
       <div class="foot">
         <p set:html={definition} />
         <nav aria-label="Footer">
-          <a href="/e/writeups/">Write-ups</a>
+          <a href="/writeups/">Write-ups</a>
           <a href={links.policy}>Report a vulnerability</a>
           <a href={links.disclosure}>Disclosure policy</a>
           <a href={links.repositories}>Repositories</a>
@@ -56,7 +52,7 @@ const inWriteups = path.startsWith('writeups/')
       </div>
     </footer>
     <script>
-      import '../scripts/e/site'
+      import '../scripts/site.ts'
     </script>
   </body>
 </html>

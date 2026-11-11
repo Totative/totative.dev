@@ -1,167 +1,147 @@
 ---
-import '@fontsource-variable/atkinson-hyperlegible-next/wght.css'
-import '@fontsource-variable/atkinson-hyperlegible-mono/wght.css'
-import Head from '../components/Head.astro'
-import { type DesignId, designs } from '../data/site'
+import { checks, links, noWriteups, reportVulnerability, services, tagline, tools } from '../data/site.ts'
+import Base from '../layouts/Base.astro'
+import { SIGHT_LIMIT } from '../lib/e-lattice.ts'
+import { getWriteups } from '../lib/writeups.ts'
 
-interface Card {
-  idea: string
-  /** Ground, ink and accent, so the chooser can hint at each design without loading it. */
-  palette: [string, string, string]
-}
-
-const cards: Record<DesignId, Card> = {
-  e: { idea: 'The integer lattice seen from a point you move: the lit points are the ones in line of sight.', palette: ['#060a12', '#e9f2fb', '#6fe3ff'] },
-}
-
-const post = 'writeups/checking-a-totative-release/'
+const LATEST_COUNT = 3
+const SHARE_DIGITS = 3
+const copyLabel = 'Copy'
+const writeups = (await getWriteups()).slice(0, LATEST_COUNT)
+const comma = tagline.indexOf(', ')
+const lead = comma === -1 ? tagline : tagline.slice(0, comma)
+const rest = comma === -1 ? '' : tagline.slice(comma + 2)
+const [example] = tools
+const exampleCheck = `${example.download}\n${example.verify}`
+const [tarball, bundle, sbom] = example.assets
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <Head title="Design mocks" />
-  </head>
-  <body>
-    <main>
-      <header>
-        <h1>Totative site mocks</h1>
-        <p>Two dark designs for totative.dev. Same copy and the same write-up in each; layout, type, motif and mood differ.</p>
-      </header>
-      <ul>
+<Base>
+  <section class="hero" aria-labelledby="tagline">
+    <div class="shell hero-in">
+      <div class="hero-copy">
+        <h1 id="tagline"><strong>{lead}{rest ? ',' : ''}</strong>{rest ? ` ${rest}` : ''}</h1>
+        <p class="actions">
+          <a class="btn" href={links.policy}>Report a vulnerability</a>
+          <a class="btn btn-quiet" href={links.disclosure}>Disclosure policy</a>
+        </p>
+      </div>
+      <div role="application" aria-label="Lattice. Arrow keys move the viewpoint." aria-describedby="lattice-note">
+        <canvas tabindex="0"></canvas>
+      </div>
+      <div class="hero-eye" aria-hidden="true"></div>
+      <div class="hero-note">
+        <p id="lattice-note">Each lit dot is in line of sight from the ringed point: their two offsets share no factor but 1.</p>
+        <p class="live">
+          From <span data-say="view">(0, 0)</span>, <span data-say="sight"></span> of <span data-say="points"></span> dots are in sight, a share of <span data-say="share"
+          ></span>; the limit is 6/π², about {SIGHT_LIMIT.toFixed(SHARE_DIGITS)}.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="shell">
+    <section class="block" aria-labelledby="services-h">
+      <h2 id="services-h">What we do</h2>
+      <ul class="services">
         {
-          designs.map((design) => {
-            const { idea, palette } = cards[design.id]
-            const [ground, ink, accent] = palette
-            return (
-              <li style={`--ground:${ground};--ink:${ink};--accent:${accent}`}>
-                <a class="open" href={`/${design.id}/`} aria-label={`${design.id.toUpperCase()} ${design.name}: home page`}>
-                  <span class="letter">{design.id.toUpperCase()}</span>
-                  <span class="name">{design.name}</span>
-                  <span class="swatch" aria-hidden="true" />
-                </a>
-                <p>{idea}</p>
-                <nav aria-label={`${design.name} pages`}>
-                  <a href={`/${design.id}/`}>Home</a>
-                  <a href={`/${design.id}/writeups/`}>Write-ups</a>
-                  <a href={`/${design.id}/${post}`}>Write-up</a>
-                </nav>
-              </li>
-            )
-          })
+          services.map((service) => (
+            <li>
+              <h3>{service.name}</h3>
+              <p>{service.text}</p>
+            </li>
+          ))
         }
       </ul>
-      <p class="lab">
-        Kept from an earlier design: the <a href="/lab/f-animation/">multiplication dial</a>, as a component another design can use.
-      </p>
-    </main>
-  </body>
-</html>
+    </section>
 
-<style>
-  html {
-    color-scheme: dark;
-    background: #0d0d0d;
-    color: #eee;
-    font: 1.0625rem/1.5 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif;
+    <section class="block" aria-labelledby="tools-h">
+      <h2 id="tools-h">Tools</h2>
+      <ul class="tools">
+        {
+          tools.map((tool) => (
+            <li>
+              <h3>
+                <a href={tool.href}>{tool.name}</a>
+                <a class="version" href={tool.release} aria-label={`${tool.name} release ${tool.version}`}>
+                  {tool.version}
+                </a>
+              </h3>
+              <p>{tool.summary}</p>
+              <p class="cmd">
+                <code>{tool.install}</code>
+                <button type="button" data-copy={tool.install}>
+                  {copyLabel}
+                </button>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="block" aria-labelledby="check-h">
+      <h2 id="check-h">What you can check</h2>
+      <div>
+        <ul class="checks">
+          {checks.map((check) => <li set:html={check} />)}
+        </ul>
+        <p class="example">For example, {example.name} {example.version}:</p>
+        <p class="cmd">
+          <code>{exampleCheck}</code>
+          <button type="button" data-copy={exampleCheck}>{copyLabel}</button>
+        </p>
+        <p class="files">
+          Each release carries three files: the source tarball ({tarball}), its provenance bundle ({bundle}) and the SBOM ({sbom}).
+        </p>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="posts-h">
+      <h2 id="posts-h">Latest write-ups</h2>
+      <div>
+        {
+          writeups.length > 0 ? (
+            <ul class="posts">
+              {writeups.map((writeup) => (
+                <li>
+                  <h3>
+                    <a href={`/writeups/${writeup.slug}/`}>{writeup.entry.data.title}</a>
+                  </h3>
+                  <p>{writeup.entry.data.description}</p>
+                  <p class="meta">
+                    <time datetime={writeup.date}>{writeup.date}</time>
+                    {`, ${writeup.minutes} min read`}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p set:html={noWriteups} />
+          )
+        }
+        <p class="more"><a href="/writeups/">All write-ups</a></p>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="report-h">
+      <h2 id="report-h">Report a vulnerability</h2>
+      <div>
+        <p set:html={reportVulnerability} />
+        <p class="actions">
+          <a class="btn" href={links.policy}>Report a vulnerability</a>
+          <a class="btn btn-quiet" href={links.disclosure}>Disclosure policy</a>
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<script>
+  import { mountLattice } from '../scripts/lattice.ts'
+
+  const hero = document.querySelector<HTMLElement>('.hero')
+  if (hero) {
+    mountLattice(hero)
   }
-  body {
-    margin: 0;
-  }
-  main {
-    max-width: 72rem;
-    margin: 0 auto;
-    padding: 56px 16px 80px;
-  }
-  h1 {
-    margin: 0;
-    font-size: 2rem;
-    line-height: 1.15;
-  }
-  header p {
-    max-width: 40rem;
-    margin: 8px 0 0;
-    color: #aaa;
-  }
-  ul {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16.5rem), 1fr));
-    gap: 16px;
-    margin: 40px 0 0;
-    padding: 0;
-    list-style: none;
-  }
-  li {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #2c2c2c;
-    border-radius: 10px;
-    overflow: hidden;
-    background: #141414;
-  }
-  .open {
-    position: relative;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: end;
-    gap: 0 12px;
-    min-height: 9rem;
-    padding: 16px;
-    background: var(--ground);
-    color: var(--ink);
-    text-decoration: none;
-  }
-  .letter {
-    font-size: 4rem;
-    font-weight: 700;
-    line-height: 0.9;
-    color: var(--accent);
-  }
-  .name {
-    padding-bottom: 4px;
-    font-size: 1.25rem;
-    font-weight: 600;
-  }
-  .swatch {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 40px;
-    height: 8px;
-    border-radius: 4px;
-    background: linear-gradient(90deg, var(--ink) 50%, var(--accent) 50%);
-  }
-  li p {
-    flex: 1;
-    margin: 0;
-    padding: 14px 16px 0;
-    color: #bbb;
-    font-size: 0.9375rem;
-  }
-  nav {
-    display: flex;
-    gap: 16px;
-    padding: 12px 16px 16px;
-    font: 500 0.8125rem/1.5 'Atkinson Hyperlegible Mono Variable', ui-monospace, monospace;
-  }
-  .lab {
-    margin: 32px 0 0;
-    color: #aaa;
-  }
-  .lab a,
-  nav a {
-    color: #fff;
-    text-underline-offset: 3px;
-  }
-  a:focus-visible {
-    outline: 2px solid #fff;
-    outline-offset: 2px;
-  }
-  .open:focus-visible {
-    outline-offset: -4px;
-  }
-  .open:hover .name {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-</style>
+</script>
