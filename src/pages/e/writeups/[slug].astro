@@ -1,0 +1,53 @@
+---
+import { render } from 'astro:content'
+import E from '../../../layouts/E.astro'
+import { links } from '../../../data/site'
+import { type Writeup, writeupPaths } from '../../../lib/writeups'
+
+export const getStaticPaths = writeupPaths
+
+interface Props {
+  writeup: Writeup
+}
+
+const { writeup } = Astro.props
+const { title, description } = writeup.entry.data
+const { Content, headings } = await render(writeup.entry)
+---
+
+<E title={title} description={description} path={`writeups/${writeup.slug}/`} progress>
+  <article class="shell page post" data-progress>
+    <header class="page-head">
+      <p class="crumb"><a href="/e/writeups/">Write-ups</a></p>
+      <h1>{title}</h1>
+      <p class="lede">{description}</p>
+      <p class="meta"><time datetime={writeup.date}>{writeup.date}</time>, {writeup.minutes} min read</p>
+    </header>
+    <nav class="contents" aria-label="On this page">
+      <p>On this page</p>
+      <ol>
+        {
+          headings
+            .filter((heading) => heading.depth === 2)
+            .map((heading) => (
+              <li>
+                <a href={`#${heading.slug}`}>{heading.text}</a>
+              </li>
+            ))
+        }
+      </ol>
+    </nav>
+    <div class="prose">
+      <Content />
+    </div>
+    <footer class="post-end">
+      <a class="btn" href={links.policy}>Report a vulnerability</a>
+      <a class="btn btn-quiet" href={links.disclosure}>Disclosure policy</a>
+      <a href="/e/writeups/">All write-ups</a>
+    </footer>
+  </article>
+</E>
+
+<script>
+  import '../../../scripts/e/post'
+</script>

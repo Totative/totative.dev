@@ -1,0 +1,167 @@
+---
+import '@fontsource-variable/atkinson-hyperlegible-next/wght.css'
+import '@fontsource-variable/atkinson-hyperlegible-mono/wght.css'
+import Head from '../components/Head.astro'
+import { type DesignId, designs } from '../data/site'
+
+interface Card {
+  idea: string
+  /** Ground, ink and accent, so the chooser can hint at each design without loading it. */
+  palette: [string, string, string]
+}
+
+const cards: Record<DesignId, Card> = {
+  e: { idea: 'The integer lattice seen from a point you move: the lit points are the ones in line of sight.', palette: ['#060a12', '#e9f2fb', '#6fe3ff'] },
+}
+
+const post = 'writeups/checking-a-totative-release/'
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Head title="Design mocks" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Totative site mocks</h1>
+        <p>Two dark designs for totative.dev. Same copy and the same write-up in each; layout, type, motif and mood differ.</p>
+      </header>
+      <ul>
+        {
+          designs.map((design) => {
+            const { idea, palette } = cards[design.id]
+            const [ground, ink, accent] = palette
+            return (
+              <li style={`--ground:${ground};--ink:${ink};--accent:${accent}`}>
+                <a class="open" href={`/${design.id}/`} aria-label={`${design.id.toUpperCase()} ${design.name}: home page`}>
+                  <span class="letter">{design.id.toUpperCase()}</span>
+                  <span class="name">{design.name}</span>
+                  <span class="swatch" aria-hidden="true" />
+                </a>
+                <p>{idea}</p>
+                <nav aria-label={`${design.name} pages`}>
+                  <a href={`/${design.id}/`}>Home</a>
+                  <a href={`/${design.id}/writeups/`}>Write-ups</a>
+                  <a href={`/${design.id}/${post}`}>Write-up</a>
+                </nav>
+              </li>
+            )
+          })
+        }
+      </ul>
+      <p class="lab">
+        Kept from an earlier design: the <a href="/lab/f-animation/">multiplication dial</a>, as a component another design can use.
+      </p>
+    </main>
+  </body>
+</html>
+
+<style>
+  html {
+    color-scheme: dark;
+    background: #0d0d0d;
+    color: #eee;
+    font: 1.0625rem/1.5 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif;
+  }
+  body {
+    margin: 0;
+  }
+  main {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 56px 16px 80px;
+  }
+  h1 {
+    margin: 0;
+    font-size: 2rem;
+    line-height: 1.15;
+  }
+  header p {
+    max-width: 40rem;
+    margin: 8px 0 0;
+    color: #aaa;
+  }
+  ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16.5rem), 1fr));
+    gap: 16px;
+    margin: 40px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #2c2c2c;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #141414;
+  }
+  .open {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: end;
+    gap: 0 12px;
+    min-height: 9rem;
+    padding: 16px;
+    background: var(--ground);
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .letter {
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 0.9;
+    color: var(--accent);
+  }
+  .name {
+    padding-bottom: 4px;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  .swatch {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--ink) 50%, var(--accent) 50%);
+  }
+  li p {
+    flex: 1;
+    margin: 0;
+    padding: 14px 16px 0;
+    color: #bbb;
+    font-size: 0.9375rem;
+  }
+  nav {
+    display: flex;
+    gap: 16px;
+    padding: 12px 16px 16px;
+    font: 500 0.8125rem/1.5 'Atkinson Hyperlegible Mono Variable', ui-monospace, monospace;
+  }
+  .lab {
+    margin: 32px 0 0;
+    color: #aaa;
+  }
+  .lab a,
+  nav a {
+    color: #fff;
+    text-underline-offset: 3px;
+  }
+  a:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+  .open:focus-visible {
+    outline-offset: -4px;
+  }
+  .open:hover .name {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+</style>

@@ -1,0 +1,62 @@
+---
+import '@fontsource-variable/atkinson-hyperlegible-next/wght.css'
+import '@fontsource-variable/atkinson-hyperlegible-next/wght-italic.css'
+import '@fontsource-variable/atkinson-hyperlegible-mono/wght.css'
+import '../styles/e.css'
+import Brand from '../components/Brand.astro'
+import Head from '../components/Head.astro'
+import MockBar from '../components/MockBar.astro'
+import { definition, links } from '../data/site'
+import bootUrl from '../scripts/e/boot.js?url'
+
+interface Props {
+  title?: string
+  description?: string
+  path?: string
+  /** Shows the reading progress line; the page marks what is being read with `data-progress`. */
+  progress?: boolean
+}
+
+const { title, description, path = '', progress = false } = Astro.props
+const inWriteups = path.startsWith('writeups/')
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Head title={title} description={description} />
+    <script is:inline src={bootUrl}></script>
+  </head>
+  <body>
+    <MockBar current="e" path={path} />
+    <a class="skip" href="#main">Skip to content</a>
+    {progress && <div class="progress" aria-hidden="true" />}
+    <header class="head shell">
+      <a class="logo" href="/e/" aria-label="Totative home"><Brand kind="wordmark" /></a>
+      <nav aria-label="Site">
+        <a href="/e/writeups/" aria-current={inWriteups ? 'page' : undefined}>Write-ups</a>
+        <a class="wide" href={links.policy}>Report a vulnerability</a>
+        <a class="wide" href={links.github}>GitHub</a>
+        <a href={links.disclosure}>Disclosure policy</a>
+      </nav>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="shell">
+      <div class="foot">
+        <p set:html={definition} />
+        <nav aria-label="Footer">
+          <a href="/e/writeups/">Write-ups</a>
+          <a href={links.policy}>Report a vulnerability</a>
+          <a href={links.disclosure}>Disclosure policy</a>
+          <a href={links.repositories}>Repositories</a>
+          <a href={links.advisories}>Advisories</a>
+        </nav>
+      </div>
+    </footer>
+    <script>
+      import '../scripts/e/site'
+    </script>
+  </body>
+</html>

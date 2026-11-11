@@ -1,0 +1,35 @@
+---
+import E from '../../../layouts/E.astro'
+import { links, noWriteups } from '../../../data/site'
+import { getWriteups } from '../../../lib/writeups'
+
+const writeups = await getWriteups()
+---
+
+<E title="Write-ups" description="Totative research write-ups and advisories." path="writeups/">
+  <div class="shell page">
+    <header class="page-head">
+      <h1>Write-ups</h1>
+      <p class="lede">Research write-ups and advisories. Advisories appear on GitHub first: <a href={links.advisories}>GitHub advisories</a>.</p>
+    </header>
+    {
+      writeups.length > 0 ? (
+        <ul class="posts">
+          {writeups.map((writeup) => (
+            <li>
+              <h2>
+                <a href={`/e/writeups/${writeup.slug}/`}>{writeup.entry.data.title}</a>
+              </h2>
+              <p>{writeup.entry.data.description}</p>
+              <p class="meta">
+                <time datetime={writeup.date}>{writeup.date}</time>, {writeup.minutes} min read
+              </p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p set:html={noWriteups} />
+      )
+    }
+  </div>
+</E>

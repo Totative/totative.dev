@@ -1,0 +1,6 @@
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Astro's build cache holds a per-build server-islands key that is not a credential and never reaches dist/."
+paths = ['''^\.astro/''', '''^node_modules/\.astro/''']

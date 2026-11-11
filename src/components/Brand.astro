@@ -1,0 +1,21 @@
+---
+import markSvg from '../assets/brand/totative-mark-dark.svg?raw'
+import wordmarkSvg from '../assets/brand/totative-wordmark-dark.svg?raw'
+
+interface Props {
+  kind: 'mark' | 'wordmark'
+}
+
+const { kind } = Astro.props
+
+// The brand files are inlined with their two fixed fills swapped for classes, so
+// each design colours them from its own palette. The clip-path ids are prefixed
+// because the mark and the wordmark both name theirs "above" and "below".
+const svg = (kind === 'mark' ? markSvg : wordmarkSvg)
+  .replace(/ width="\d+" height="\d+"/, ` class="brand brand-${kind}"`)
+  .replaceAll('fill="#F2EEF8"', 'class="wm-ink"')
+  .replaceAll('fill="#B26BFF"', 'class="wm-accent"')
+  .replaceAll(/(id="|url\(#)(above|below)/g, `$1${kind}-$2`)
+---
+
+<Fragment set:html={svg} />

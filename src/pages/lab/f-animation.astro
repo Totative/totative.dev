@@ -1,0 +1,166 @@
+---
+import '@fontsource-variable/atkinson-hyperlegible-next/wght.css'
+import '@fontsource-variable/atkinson-hyperlegible-next/wght-italic.css'
+import '@fontsource-variable/atkinson-hyperlegible-mono/wght.css'
+import Head from '../../components/Head.astro'
+import MockBar from '../../components/MockBar.astro'
+import ModDial from '../../components/mod-dial/ModDial.astro'
+import type { DialPreset } from '../../components/mod-dial/mount'
+
+// The six pairs design F showed, one per chapter, each with what it said about that pair.
+const presets: [DialPreset, ...DialPreset[]] = [
+  { n: 120, m: 7, label: '7 mod 120', note: 'Multiply every residue by 7 and no two collide. That is what a totative does.' },
+  { n: 120, m: 6, label: '6 mod 120', note: 'The same dial, one step down. 6 divides 120, so five residues in six are never reached.' },
+  { n: 61, m: 2, label: '2 mod 61', note: '61 is prime, so every m from 1 to 60 is a totative of it.' },
+  { n: 35, m: 3, label: '3 mod 35', note: 'RSA rests on this: its public exponent is a totative of φ(n), so a private exponent exists that undoes it.' },
+  { n: 90, m: 4, label: '4 mod 90', note: 'A shared factor of 2 is enough: half the dial is never reached.' },
+  { n: 36, m: 35, label: '35 mod 36', note: 'n − 1 is always a totative of n, and always its own inverse.' },
+]
+
+const usage = `---
+import ModDial from '../components/mod-dial/ModDial.astro'
+---
+<ModDial presets={[{ n: 120, m: 7 }, { n: 61, m: 2 }]} cycle={5} controls={false} class="in-my-design" />
+
+<style is:global>
+  .in-my-design { --dial-from: #6fe3ff; --dial-to: #e9f2fb; --dial-ground: #060a12; --dial-size: 24rem; }
+</style>`
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Head title="Multiplication dial" description="The dial animation from design F, as a component on its own." />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <MockBar />
+    <main id="main">
+      <header>
+        <p class="eyebrow">Lab</p>
+        <h1>Multiplication dial</h1>
+        <p>
+          The animation from design F, kept as a component so another design can use it. The residues 0 to <i>n</i> − 1 sit on a circle and a chord
+          joins each <i>k</i> to <i>m</i>·<i>k</i> mod <i>n</i>. When <i>m</i> is a totative of <i>n</i>, no two chords end on the same residue.
+        </p>
+      </header>
+
+      <ModDial presets={presets} cycle={5} class="demo" />
+
+      <section aria-labelledby="palettes">
+        <h2 id="palettes">In another palette</h2>
+        <p>The same component as a picture with no controls, taking its colours from the custom properties of design E.</p>
+        <div class="pair">
+          <ModDial presets={presets} cycle={4} controls={false} class="as-e" />
+        </div>
+      </section>
+
+      <section aria-labelledby="use">
+        <h2 id="use">Using it</h2>
+        <p>
+          Everything is in <code>src/components/mod-dial/</code>: the component, its maths, its drawing and its script. It needs{' '}
+          <code>gcd</code> and <code>inverse</code> from <code>src/lib/totient.ts</code> and nothing from npm.
+        </p>
+        <pre><code>{usage}</code></pre>
+        <p>
+          A host page moves the dial by dispatching <code>moddial:show</code> on the component with <code>{'{ n, m, label, note }'}</code>, for
+          example as sections scroll past, and hears each change as <code>moddial:change</code>. Without script the page shows the first pair as
+          a still drawing.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  html {
+    color-scheme: dark;
+    background: #000;
+    color: #f5f1ee;
+    font: 1.0625rem/1.6 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif;
+  }
+  body {
+    margin: 0;
+  }
+  .skip {
+    position: absolute;
+    left: 16px;
+    top: -100px;
+    z-index: 2000;
+    padding: 8px 12px;
+    background: #f5f1ee;
+    color: #000;
+  }
+  .skip:focus {
+    top: 8px;
+  }
+  main {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 48px 16px 96px;
+  }
+  main > header p,
+  main > section > p {
+    color: #b9b1ad;
+  }
+  .eyebrow {
+    margin: 0;
+    font: 500 0.8125rem/1.2 'Atkinson Hyperlegible Mono Variable', ui-monospace, monospace;
+  }
+  h1 {
+    margin: 4px 0 12px;
+    font-size: clamp(2.25rem, 7vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  h2 {
+    margin: 72px 0 8px;
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+  main p {
+    margin: 0 0 16px;
+  }
+  .demo {
+    margin-top: 32px;
+  }
+  .pair {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .pair .mod-dial {
+    padding: 20px;
+    border-radius: 12px;
+    background: var(--dial-ground);
+    --dial-size: 18rem;
+  }
+  .pair .dial-rule {
+    font-size: 1.25rem;
+  }
+  .as-e {
+    --dial-from: #2f7f99;
+    --dial-to: #6fe3ff;
+    --dial-ink: #e9f2fb;
+    --dial-muted: #8a9bb0;
+    --dial-line: #1c2738;
+    --dial-ground: #060a12;
+  }
+  code {
+    font: 0.875em 'Atkinson Hyperlegible Mono Variable', ui-monospace, monospace;
+  }
+  pre {
+    overflow-x: auto;
+    margin: 0 0 16px;
+    padding: 16px;
+    border: 1px solid #262122;
+    border-radius: 8px;
+    line-height: 1.5;
+  }
+  a:focus-visible {
+    outline: 2px solid #ff9a3d;
+    outline-offset: 2px;
+  }
+</style>
