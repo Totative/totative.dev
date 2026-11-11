@@ -1,0 +1,174 @@
+---
+import { definition, links, services, tagline } from '../data/site.ts'
+import Base from '../layouts/Base.astro'
+import tokensCss from '../styles/e-core.css?raw'
+
+// Sizes are the files' own width and height attributes.
+const wordmark = { kind: 'wordmark', width: 263, height: 73, formats: ['svg'] } as const
+const mark = { kind: 'mark', width: 512, height: 512, formats: ['svg'] } as const
+const logos = [
+  { ...wordmark, file: 'totative-wordmark-dark', name: 'Wordmark, dark', use: 'On dark backgrounds.', tone: 'dark' },
+  { ...wordmark, file: 'totative-wordmark-light', name: 'Wordmark, light', use: 'On light backgrounds.', tone: 'light' },
+  { ...mark, file: 'totative-mark-dark', name: 'Mark, dark', use: 'Where the name is already given.', tone: 'dark' },
+  { ...mark, file: 'totative-mark-light', name: 'Mark, light', use: 'The same, on light backgrounds.', tone: 'light' },
+  {
+    ...mark,
+    file: 'totative-avatar',
+    name: 'Avatar',
+    use: 'Profile pictures: the dark mark on its own background, 512 px.',
+    tone: 'dark',
+    formats: ['svg', 'png'],
+  },
+] as const
+
+// Values come from the site's own stylesheet so this page cannot drift from it.
+const tokenNames = [
+  ['bg', 'Background'],
+  ['surface', 'Surface'],
+  ['line', 'Line'],
+  ['ink', 'Ink'],
+  ['soft', 'Soft'],
+  ['muted', 'Muted'],
+  ['accent', 'Accent'],
+] as const
+const colours = tokenNames.map(([token, name]) => {
+  const hex = tokensCss.match(new RegExp(`--${token}:\\s*(#[0-9a-f]{6})`, 'i'))?.[1]
+  if (!hex) {
+    throw new Error(`--${token} is not a hex colour in e-core.css`)
+  }
+  return { token: `--${token}`, name, hex }
+})
+
+const fonts = [
+  {
+    name: 'Atkinson Hyperlegible Next',
+    use: 'Text, headings and the wordmark (the wordmark is set at weight 800).',
+    href: 'https://fontsource.org/fonts/atkinson-hyperlegible-next',
+    mono: false,
+  },
+  {
+    name: 'Atkinson Hyperlegible Mono',
+    use: 'Code, commands and file names.',
+    href: 'https://fontsource.org/fonts/atkinson-hyperlegible-mono',
+    mono: true,
+  },
+] as const
+
+const [research, supplyChain, tooling] = services
+const specimen = 'Aa Totative 0123'
+const fontSource = 'Get it from Fontsource'
+---
+
+<Base title="Brand" description="The Totative name, logos, colours and typefaces, with files to download." path="brand/">
+  <div class="shell page">
+    <header class="page-head">
+      <h1>Brand</h1>
+      <p class="lede">The name, logos, colours and typefaces, and the files to use them.</p>
+    </header>
+
+    <section class="block" aria-labelledby="name-h">
+      <h2 id="name-h">Name</h2>
+      <div class="brand-copy">
+        <p>
+          In text, write <strong>Totative</strong>: one word, capital T, the rest lower case. Not TOTATIVE, not ToTative.
+          The wordmark sets the name in lower case; that is the logo, not the spelling.
+        </p>
+        <p>Tagline: <em>{tagline}</em></p>
+        <p class="brand-note" set:html={definition} />
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="logos-h">
+      <h2 id="logos-h">Logos</h2>
+      <div>
+        <ul class="logo-grid">
+          {
+            logos.map((logo) => (
+              <li>
+                <div class:list={['logo-tile', `logo-${logo.tone}`, `logo-${logo.kind}`]}>
+                  <img src={`/brand/${logo.file}.svg`} alt={`Totative ${logo.kind}`} width={logo.width} height={logo.height} />
+                </div>
+                <h3>{logo.name}</h3>
+                <p>{logo.use}</p>
+                <p class="downloads">
+                  {logo.formats.map((format) => (
+                    <a href={`/brand/${logo.file}.${format}`} download={true}>
+                      {format.toUpperCase()}
+                    </a>
+                  ))}
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+        <h3 class="brand-sub">Clear space</h3>
+        <p>
+          The mark files carry their own clear space: the T sits about a fifth of the square in from each edge, so place
+          them whole rather than cropped. The wordmark files are cropped to the letters; leave space around them.
+        </p>
+        <h3 class="brand-sub">Do and don't</h3>
+        <ul class="checks">
+          <li>Use the dark files on dark backgrounds and the light files on light ones.</li>
+          <li>Keep the T cut on its slant, with the lower piece in the accent and shifted right; don't rejoin it.</li>
+          <li>Don't recolour, outline, stretch or rotate the logos, or reset the wordmark in another typeface.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="colours-h">
+      <h2 id="colours-h">Colours</h2>
+      <div class="brand-copy">
+        <ul class="swatches">
+          {
+            colours.map((colour) => (
+              <li>
+                <svg class="chip" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true">
+                  <rect width="1" height="1" fill={colour.hex} />
+                </svg>
+                <h3>{colour.name}</h3>
+                <p>
+                  <code>{colour.hex}</code> <code class="token">{colour.token}</code>
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="brand-note">The accent is for the one primary action or highlight on a page, not for body text or large fills.</p>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="type-h">
+      <h2 id="type-h">Typefaces</h2>
+      <ul class="fonts">
+        {
+          fonts.map((font) => (
+            <li>
+              <p class:list={['specimen', { 'specimen-mono': font.mono }]} aria-hidden="true">{specimen}</p>
+              <h3>{font.name}</h3>
+              <p>{font.use}</p>
+              <p class="downloads">
+                <a href={font.href}>{fontSource}</a>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="block" aria-labelledby="press-h">
+      <h2 id="press-h">Press</h2>
+      <div class="brand-copy">
+        <p>
+          Totative does software security research and builds the tools for it: {research.name.toLowerCase()}, finding
+          bugs in software we don't own and disclosing them responsibly; {supplyChain.name.toLowerCase()} work, with
+          provenance and CI hardening shown on our own releases; and {tooling.name.toLowerCase()}, open-source security
+          libraries released when ready.
+        </p>
+        <ul class="checks">
+          <li>Security reports: follow the <a href={links.policy}>security policy</a>, not a public issue.</li>
+          <li>Everything else: <a href={links.github}>github.com/Totative</a>.</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</Base>

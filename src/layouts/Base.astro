@@ -17,6 +17,7 @@ interface Props {
 
 const { title, description, path = '', progress = false } = Astro.props
 const inWriteups = path.startsWith('writeups/')
+const inBrand = path === 'brand/'
 const pageTitle = title ? `${title} - Totative` : 'Totative'
 const pageDescription = description ?? tagline
 const pageUrl = new URL(path, 'https://totative.dev/').href
@@ -47,6 +48,7 @@ const ogType = progress ? 'article' : 'website'
       <a class="logo" href="/" aria-label="Totative home"><Brand kind="wordmark" /></a>
       <nav aria-label="Site">
         <a href="/writeups/" aria-current={inWriteups ? 'page' : undefined}>Write-ups</a>
+        <a class="wide" href="/brand/" aria-current={inBrand ? 'page' : undefined}>Brand</a>
         <a class="wide" href={links.policy}>Report a vulnerability</a>
         <a class="wide" href={links.github}>GitHub</a>
         <a href={links.disclosure}>Disclosure policy</a>
@@ -60,6 +62,7 @@ const ogType = progress ? 'article' : 'website'
         <p set:html={definition} />
         <nav aria-label="Footer">
           <a href="/writeups/">Write-ups</a>
+          <a href="/brand/">Brand</a>
           <a href={links.policy}>Report a vulnerability</a>
           <a href={links.disclosure}>Disclosure policy</a>
           <a href={links.repositories}>Repositories</a>
