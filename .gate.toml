@@ -1,0 +1,2 @@
+[gates.gitleaks]
+run = '[ -n "$CI" ] || gitleaks git --redact --no-banner --log-level warn'
