@@ -116,3 +116,23 @@ for (const row of failures) {
     throw new Error(`getWriteups(${row.filePath}): expected throw`)
   }
 }
+
+entries([
+  { id: 'newer', filePath: '2026-11-10-checking-a-totative-release.md', body: 'hi' },
+  { id: 'older', filePath: '2020-01-01-checking-a-totative-release.md', body: 'hi' },
+])
+{
+  let threw = false
+  try {
+    await getWriteups()
+  } catch (error) {
+    threw = true
+    const want = 'write-up "older" reuses slug "checking-a-totative-release"'
+    if (!(error instanceof Error) || error.message !== want) {
+      throw new Error(`getWriteups throw: got ${String(error)}, want ${want}`, { cause: error })
+    }
+  }
+  if (!threw) {
+    throw new Error('getWriteups(duplicate slug): expected throw')
+  }
+}
