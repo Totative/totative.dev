@@ -1,0 +1,5 @@
+reconciled = "canon v0.1.0-poc"
+
+[deviations]
+# Astro template directives (set:html) and HTML attributes (datetime) are valid in .astro files but read as unknown React props to this rule (18 findings measured).
+"ts-biome-00006 suspicious/noUnknownAttribute" = "Astro templates are HTML, not React"
