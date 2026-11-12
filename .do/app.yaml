@@ -15,9 +15,13 @@ services:
 domains:
   - domain: totative.dev
     type: PRIMARY
+    zone: totative.dev
   - domain: www.totative.dev
     type: ALIAS
+    zone: totative.dev
   - domain: totative.ca
     type: ALIAS
+    zone: totative.ca
   - domain: www.totative.ca
     type: ALIAS
+    zone: totative.ca
