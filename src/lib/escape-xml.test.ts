@@ -37,13 +37,13 @@ const unescapeXml = (value: string): string =>
 
 const UNESCAPED_AMP = /&(?!(?:amp|lt|gt|quot|apos);)/
 
-fc.assert(
+await fc.assert(
   fc.property(fc.string(), (value) => {
     const out = escapeXml(value)
     return out.length >= value.length && !/[<>"']/.test(out) && !UNESCAPED_AMP.test(out)
   }),
 )
 
-fc.assert(fc.property(fc.string(), (value) => escapeXml(value) === escapeXmlRef(value)))
+await fc.assert(fc.property(fc.string(), (value) => escapeXml(value) === escapeXmlRef(value)))
 
-fc.assert(fc.property(fc.string(), (value) => unescapeXml(escapeXml(value)) === value))
+await fc.assert(fc.property(fc.string(), (value) => unescapeXml(escapeXml(value)) === value))
