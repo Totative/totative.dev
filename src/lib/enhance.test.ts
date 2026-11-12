@@ -42,7 +42,7 @@ class MiniEl {
   attrs: Record<string, string> = {}
   dataset: Record<string, string> = {}
   style: Record<string, string> = {}
-  listeners: Record<string, Listener[]> = { click: [] }
+  listeners: Partial<Record<string, Listener[]>> = { click: [] }
   rect = { top: 0, height: 0 }
   classList = { contains: (c: string) => this.className.split(/\s+/).includes(c) }
 
