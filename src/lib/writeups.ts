@@ -17,6 +17,7 @@ const MIN_MINUTES = 1
 
 export async function getWriteups(): Promise<Writeup[]> {
   const entries = await getCollection('writeups')
+  const seen = new Set<string>()
   return entries
     .map((entry) => {
       const match = NAME.exec(entry.filePath ?? '')
@@ -24,6 +25,10 @@ export async function getWriteups(): Promise<Writeup[]> {
       if (!(date && slug)) {
         throw new Error(`write-up "${entry.id}" is not named YYYY-MM-DD-slug.md`)
       }
+      if (seen.has(slug)) {
+        throw new Error(`write-up "${entry.id}" reuses slug "${slug}"`)
+      }
+      seen.add(slug)
       const words = (entry.body ?? '').split(WORDS).filter(Boolean).length
       return {
         entry,
