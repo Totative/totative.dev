@@ -118,7 +118,7 @@ class MiniEl {
   }
 
   async click() {
-    for (const fn of this.listeners.click) {
+    for (const fn of this.listeners.click ?? []) {
       await fn()
     }
   }
@@ -146,7 +146,7 @@ function matches(el: MiniEl, selector: string): boolean {
   }
   const attr = /^([a-z][\w-]*)\[([a-z-]+)\]$/i.exec(selector)
   if (attr) {
-    const [, tag, name] = attr
+    const [, tag, name = ''] = attr
     if (el.tag !== tag) {
       return false
     }
@@ -157,7 +157,7 @@ function matches(el: MiniEl, selector: string): boolean {
   }
   const cls = /^([a-z][\w-]*)\.([a-z][\w-]*)$/i.exec(selector)
   if (cls) {
-    return el.tag === cls[1] && el.className.split(/\s+/).includes(cls[2])
+    return el.tag === cls[1] && el.className.split(/\s+/).includes(cls[2] ?? '')
   }
   return el.tag === selector
 }
