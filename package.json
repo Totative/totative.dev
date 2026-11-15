@@ -12,10 +12,10 @@
     "scan": "mkdir -p scan-out && uv run --with playwright python scripts/scan_runtime.py http://127.0.0.1:4321 scan-out"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.4",
+    "@astrojs/sitemap": "^3.7.5",
     "@fontsource-variable/atkinson-hyperlegible-mono": "^5.3.0",
     "@fontsource-variable/atkinson-hyperlegible-next": "^5.3.0",
-    "astro": "^7.4.11",
+    "astro": "^7.4.12",
     "shiki": "^4.6.0",
     "typescript": "7"
   },
