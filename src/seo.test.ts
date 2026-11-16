@@ -1,6 +1,7 @@
 // @ts-expect-error Runtime types come from `bun test`, not the app tsconfig.
 import { expect, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
+import { sitemapLastmod } from './lib/sitemap-lastmod.ts'
 
 const head = readFileSync(new URL('./components/Head.astro', import.meta.url), 'utf8')
 const base = readFileSync(new URL('./layouts/Base.astro', import.meta.url), 'utf8')
@@ -13,6 +14,16 @@ test('indexable pages emit an absolute canonical URL', () => {
   expect(head).toContain('href={pageUrl}')
   expect(base).toContain('pageUrl={pageUrl}')
   expect(base).toContain("new URL(path, 'https://totative.dev/').href")
+})
+
+test('sitemap lastmod uses the write-up date, otherwise the build time', () => {
+  const now = new Date('2026-11-16T12:00:00.000Z')
+  const dates = new Map([['checking-a-totative-release', '2026-11-10']])
+  expect(
+    sitemapLastmod('https://totative.dev/writeups/checking-a-totative-release/', dates, now),
+  ).toEqual(new Date('2026-11-10T00:00:00.000Z'))
+  expect(sitemapLastmod('https://totative.dev/', dates, now)).toEqual(now)
+  expect(sitemapLastmod('https://totative.dev/writeups/', dates, now)).toEqual(now)
 })
 
 test('apple-touch-icon is a 180 PNG linked from head and the manifest', () => {
