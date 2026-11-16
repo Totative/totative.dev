@@ -5,12 +5,23 @@ import { readFileSync } from 'node:fs'
 const head = readFileSync(new URL('./components/Head.astro', import.meta.url), 'utf8')
 const base = readFileSync(new URL('./layouts/Base.astro', import.meta.url), 'utf8')
 const notFound = readFileSync(new URL('./pages/404.astro', import.meta.url), 'utf8')
+const manifest = readFileSync(new URL('../public/manifest.webmanifest', import.meta.url), 'utf8')
+const appleTouch = new URL('../public/apple-touch-icon.png', import.meta.url)
 
 test('indexable pages emit an absolute canonical URL', () => {
   expect(head).toContain('rel="canonical"')
   expect(head).toContain('href={pageUrl}')
   expect(base).toContain('pageUrl={pageUrl}')
   expect(base).toContain("new URL(path, 'https://totative.dev/').href")
+})
+
+test('apple-touch-icon is a 180 PNG linked from head and the manifest', () => {
+  expect(head).toContain('rel="apple-touch-icon"')
+  expect(head).toContain('href="/apple-touch-icon.png"')
+  expect(manifest).toContain('/apple-touch-icon.png')
+  const png = readFileSync(appleTouch)
+  expect(png.readUInt32BE(16)).toBe(180)
+  expect(png.readUInt32BE(20)).toBe(180)
 })
 
 test('large twitter cards include twitter:image and alt', () => {

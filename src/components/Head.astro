@@ -20,3 +20,4 @@ const { title, description = tagline, pageUrl, noindex = false } = Astro.props
 {noindex && <meta name="robots" content="noindex, follow" />}
 {pageUrl && !noindex && <link rel="canonical" href={pageUrl} />}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
