@@ -56,7 +56,7 @@ export const tools = [
     {
       summary:
         'Asks the machine’s antivirus about a folder of files: Windows AMSI, a clamd daemon, or a command you name.',
-      version: 'v0.3.0',
+      version: 'v0.4.0',
     },
   ),
   tool(
@@ -71,7 +71,7 @@ export const tools = [
   tool('go-codepair', 'pairs two devices on a LAN with a short typed code.', {
     summary:
       'Pair two devices on a LAN with a short human-typed code and an authenticated key exchange.',
-    version: 'v0.2.0',
+    version: 'v0.3.0',
   }),
 ] as const
 
