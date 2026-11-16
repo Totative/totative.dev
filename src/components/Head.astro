@@ -4,9 +4,11 @@ import { tagline } from '../data/site.ts'
 interface Props {
   title?: string | undefined
   description?: string | undefined
+  pageUrl?: string | undefined
+  noindex?: boolean | undefined
 }
 
-const { title, description = tagline } = Astro.props
+const { title, description = tagline, pageUrl, noindex = false } = Astro.props
 ---
 
 <meta charset="utf-8" />
@@ -15,4 +17,7 @@ const { title, description = tagline } = Astro.props
 <meta name="referrer" content="no-referrer" />
 <title>{title ? `${title} - Totative` : 'Totative'}</title>
 <meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex, follow" />}
+{pageUrl && !noindex && <link rel="canonical" href={pageUrl} />}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />

@@ -12,9 +12,10 @@ interface Props {
   path?: string
   /** Shows the reading progress line; the page marks what is being read with `data-progress`. */
   progress?: boolean
+  noindex?: boolean
 }
 
-const { title, description, path = '', progress = false } = Astro.props
+const { title, description, path = '', progress = false, noindex = false } = Astro.props
 const inWriteups = path.startsWith('writeups/')
 const inBrand = path === 'brand/'
 const pageTitle = title ? `${title} - Totative` : 'Totative'
@@ -26,19 +27,21 @@ const ogType = progress ? 'article' : 'website'
 <!doctype html>
 <html lang="en">
   <head>
-    <Head title={title} description={description} />
+    <Head title={title} description={description} pageUrl={pageUrl} noindex={noindex} />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="alternate" type="application/atom+xml" title="Totative write-ups" href="/writeups/feed.xml" />
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="Totative" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
-    <meta property="og:url" content={pageUrl} />
+    {!noindex && <meta property="og:url" content={pageUrl} />}
     <meta property="og:image" content="https://totative.dev/og.png" />
     <meta property="og:image:width" content="1280" />
     <meta property="og:image:height" content="640" />
     <meta property="og:image:alt" content="Totative" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://totative.dev/og.png" />
+    <meta name="twitter:image:alt" content="Totative" />
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
