@@ -17,6 +17,11 @@ test('indexable pages emit an absolute canonical URL', () => {
   expect(base).toContain("new URL(path, 'https://totative.dev/').href")
 })
 
+test('document and Caddy both send no-referrer', () => {
+  expect(head).toContain('<meta name="referrer" content="no-referrer" />')
+  expect(caddy).toContain('Referrer-Policy "no-referrer"')
+})
+
 test('Caddy 301s index.html duplicates onto the directory URL', () => {
   expect(caddy).toContain('@indexhtml path_regexp indexhtml ^(.*/)index\\.html$')
   expect(caddy).toContain('redir @indexhtml {re.indexhtml.1} 301')
