@@ -8,6 +8,7 @@
     "preview": "astro preview",
     "lint": "biome check --error-on-warnings .",
     "typecheck": "astro sync && tsc -b --noEmit --pretty false",
+    "test": "bun test",
     "check": "bunx -p typescript@6.0.3 -p @astrojs/check@0.9.12 astro-check",
     "scan": "mkdir -p scan-out && uv run --with playwright python scripts/scan_runtime.py http://127.0.0.1:4321 scan-out"
   },
