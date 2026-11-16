@@ -22,6 +22,10 @@ test('Caddy 301s index.html duplicates onto the directory URL', () => {
   expect(caddy).toContain('redir @indexhtml {re.indexhtml.1} 301')
 })
 
+test('Caddy 301s /sitemap.xml to /sitemap-index.xml', () => {
+  expect(caddy).toContain('redir /sitemap.xml /sitemap-index.xml 301')
+})
+
 test('sitemap lastmod uses the write-up date, otherwise the build time', () => {
   const now = new Date('2026-11-16T12:00:00.000Z')
   const dates = new Map([['checking-a-totative-release', '2026-11-10']])
