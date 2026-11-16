@@ -49,7 +49,7 @@ jobs:
           echo "$hdr" | grep -i '^content-security-policy:' | grep -F "upgrade-insecure-requests"
           echo "$hdr" | grep -i '^strict-transport-security:' | grep -F "max-age=63072000; includeSubDomains; preload"
           echo "$hdr" | grep -i '^x-content-type-options:' | grep -F nosniff
-          echo "$hdr" | grep -i '^referrer-policy:' | grep -F strict-origin-when-cross-origin
+          echo "$hdr" | grep -i '^referrer-policy:' | grep -F no-referrer
           echo "$hdr" | grep -i '^permissions-policy:' | grep -F "camera=(), microphone=(), geolocation=(), interest-cohort=()"
           echo "$hdr" | grep -i '^cross-origin-opener-policy:' | grep -F same-origin
           echo "$hdr" | grep -i '^cross-origin-resource-policy:' | grep -F same-origin
