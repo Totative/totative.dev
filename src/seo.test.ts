@@ -13,6 +13,14 @@ test('indexable pages emit an absolute canonical URL', () => {
   expect(base).toContain("new URL(path, 'https://totative.dev/').href")
 })
 
+test('large twitter cards include twitter:image and alt', () => {
+  expect(base).toContain('name="twitter:card"')
+  expect(base).toContain('content="summary_large_image"')
+  expect(base).toContain('name="twitter:image"')
+  expect(base).toContain('content="https://totative.dev/og.png"')
+  expect(base).toContain('name="twitter:image:alt"')
+})
+
 test('404 is noindex and omits og:url and canonical', () => {
   expect(notFound).toContain('noindex')
   expect(head).toContain('name="robots"')
