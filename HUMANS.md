@@ -21,16 +21,16 @@ bun install
 
 ## Usage
 
-| Command | What it does |
-| --- | --- |
-| `bun run dev` | Astro dev server |
-| `bun run build` | Static build into `dist/` |
-| `bun run preview` | Serve `dist/` locally |
-| `bun run lint` | Biome check with warnings as errors |
-| `bun run typecheck` | `astro sync` and `tsc -b --noEmit` (project TypeScript 7) |
-| `bun run test` | `bun test` |
-| `bun run check` | `astro-check` via bunx TypeScript 6 (`@astrojs/check`); the project itself is on TypeScript 7 |
-| `bun run scan` | Runtime CSP check against `http://127.0.0.1:4321` (preview or container must already be up) |
+| Command             | What it does                                                                                  |
+| ------------------- | --------------------------------------------------------------------------------------------- |
+| `bun run dev`       | Astro dev server                                                                              |
+| `bun run build`     | Static build into `dist/`                                                                     |
+| `bun run preview`   | Serve `dist/` locally                                                                         |
+| `bun run lint`      | Biome check with warnings as errors                                                           |
+| `bun run typecheck` | `astro sync` and `tsc -b --noEmit` (project TypeScript 7)                                     |
+| `bun run test`      | `bun test`                                                                                    |
+| `bun run check`     | `astro-check` via bunx TypeScript 6 (`@astrojs/check`); the project itself is on TypeScript 7 |
+| `bun run scan`      | Runtime CSP check against `http://127.0.0.1:4321` (preview or container must already be up)   |
 
 ## Container
 
