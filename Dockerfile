@@ -7,7 +7,7 @@ COPY public ./public
 COPY src ./src
 RUN bun run build
 
-FROM caddy:2.11.9@sha256:4e2425f6009577e7c651010f16679c28f7d12df3e7b1914f941a7a3370746b3c
+FROM caddy:2.11.9@sha256:f971688b2aaf1a26d256de552f17fb13f64fc5ed2dee4cf40c7f9d70cea0e12d
 RUN addgroup -S -g 1000 caddy && adduser -S -H -u 1000 -G caddy caddy
 COPY --from=build --chown=caddy:caddy /app/dist /usr/share/caddy
 COPY --chown=caddy:caddy Caddyfile /etc/caddy/Caddyfile
