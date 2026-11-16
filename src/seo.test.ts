@@ -8,12 +8,18 @@ const base = readFileSync(new URL('./layouts/Base.astro', import.meta.url), 'utf
 const notFound = readFileSync(new URL('./pages/404.astro', import.meta.url), 'utf8')
 const manifest = readFileSync(new URL('../public/manifest.webmanifest', import.meta.url), 'utf8')
 const appleTouch = new URL('../public/apple-touch-icon.png', import.meta.url)
+const caddy = readFileSync(new URL('../Caddyfile', import.meta.url), 'utf8')
 
 test('indexable pages emit an absolute canonical URL', () => {
   expect(head).toContain('rel="canonical"')
   expect(head).toContain('href={pageUrl}')
   expect(base).toContain('pageUrl={pageUrl}')
   expect(base).toContain("new URL(path, 'https://totative.dev/').href")
+})
+
+test('Caddy 301s index.html duplicates onto the directory URL', () => {
+  expect(caddy).toContain('@indexhtml path_regexp indexhtml ^(.*/)index\\.html$')
+  expect(caddy).toContain('redir @indexhtml {re.indexhtml.1} 301')
 })
 
 test('sitemap lastmod uses the write-up date, otherwise the build time', () => {
