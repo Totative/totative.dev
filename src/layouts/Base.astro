@@ -26,7 +26,7 @@ const ogType = progress ? 'article' : 'website'
 <!doctype html>
 <html lang="en">
   <head>
-    <Head title={title} description={description} />
+    <Head title={title} description={description} pageUrl={pageUrl} />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="alternate" type="application/atom+xml" title="Totative write-ups" href="/writeups/feed.xml" />
     <meta property="og:type" content={ogType} />
