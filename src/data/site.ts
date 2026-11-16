@@ -1,6 +1,8 @@
 // Copy is taken as written from the current site, the organisation profile and
 // the three library READMEs. The `html` fields carry inline markup from those sources.
 
+export const siteName = 'Totative'
+
 export const tagline = 'Software security research, and the tools we build for it.'
 
 export const links = {

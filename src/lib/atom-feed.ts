@@ -1,7 +1,5 @@
-import { links } from '../data/site.ts'
+import { siteName } from '../data/site.ts'
 import { escapeXml } from './escape-xml.ts'
-
-const authorName = new URL(links.github).pathname.slice(1)
 
 const WRITEUPS = 'https://totative.dev/writeups/'
 
@@ -38,7 +36,7 @@ export function buildWriteupsAtomFeed(
   <id>${WRITEUPS}</id>
   <title>Totative write-ups</title>
   <link href="${WRITEUPS}" />
-  <author><name>${escapeXml(authorName)}</name></author>
+  <author><name>${escapeXml(siteName)}</name></author>
   <updated>${updated}</updated>
 ${entries}
 </feed>
