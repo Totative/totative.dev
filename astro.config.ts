@@ -6,10 +6,12 @@ import { tokenClasses } from './src/lib/token-classes.ts'
 
 const WRITEUP_FILE = /^(\d{4}-\d{2}-\d{2})-(.+)\.md$/
 
-const writeupDates = new Map(
+const writeupDates = new Map<string, string>(
   readdirSync(new URL('./src/content/writeups', import.meta.url)).flatMap((name) => {
     const match = WRITEUP_FILE.exec(name)
-    return match ? ([[match[2], match[1]]] as const) : []
+    const date = match?.[1]
+    const slug = match?.[2]
+    return date && slug ? [[slug, date]] : []
   }),
 )
 
@@ -21,7 +23,8 @@ export default defineConfig({
   integrations: [
     sitemap({
       serialize(item) {
-        return { ...item, lastmod: sitemapLastmod(item.url, writeupDates, builtAt) }
+        item.lastmod = sitemapLastmod(item.url, writeupDates, builtAt).toISOString()
+        return item
       },
     }),
   ],
