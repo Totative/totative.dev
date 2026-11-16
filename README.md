@@ -1,32 +1,44 @@
-# totative.dev
+<h1 align="center">totative.dev</h1>
 
-The public site for [Totative](https://github.com/Totative): software security research, and the tools we build for it.
+<div align="center">
 
-## Local
+[![CI](https://img.shields.io/github/actions/workflow/status/Totative/totative.dev/ci.yml?label=CI)](https://github.com/Totative/totative.dev/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/Totative/totative.dev)](LICENSE)
+
+</div>
+
+---
+
+Static Astro 7 site for [Totative](https://github.com/Totative), served at <https://totative.dev>. Lattice is the layout: home, write-ups under `/writeups/`, and brand files under `/brand/`. Production Caddy serves `dist/` with a strict CSP (no inline script or style).
+
+Local work uses Bun. The runbook, container, and DigitalOcean deploy notes are in [HUMANS.md](HUMANS.md). File layout and CSP rules are in [AGENTS.md](AGENTS.md).
+
+## Quick start
 
 ```sh
 bun install
 bun run dev
 ```
 
-Production build:
+Install, verify, container, and deploy: [HUMANS.md](HUMANS.md).
 
-```sh
-bun run build
-bun run preview
-```
+## Highlights
 
-`bun run check` type-checks the Astro project. `bun run scan` runs the strict-CSP runtime check against a preview already listening on <http://127.0.0.1:4321>.
+- Astro 7 static build, Bun for install and scripts
+- Write-ups at `/writeups/` and `/writeups/<slug>/`
+- Brand page at `/brand/` (`public/brand/` copies of the org profile assets)
+- Caddy serves `dist/` in production (Docker `EXPOSE 8080`)
+- `bun run scan` checks the strict CSP against a running preview
+- DigitalOcean App Platform deploys `main` from [`.do/app.yaml`](.do/app.yaml)
 
-## Container
+## Documentation
 
-```sh
-docker build -t totative-dev .
-docker run -p 8080:8080 totative-dev
-```
+| Doc                    | What                                    |
+| ---------------------- | --------------------------------------- |
+| [HUMANS.md](HUMANS.md) | Install, run, verify, container, deploy |
+| [AGENTS.md](AGENTS.md) | Commands, CSP, file layout              |
+| [LICENSE](LICENSE)     | Apache License 2.0                      |
 
-Caddy serves `dist/` on `:8080` with the production headers. Unknown paths return the 404 page with status 404. `www.totative.dev`, `totative.ca`, and `www.totative.ca` 301 to `https://totative.dev{uri}`.
+## License
 
-## Deploy
-
-DigitalOcean App Platform builds `main` from [`.do/app.yaml`](.do/app.yaml): the Dockerfile, region `tor1`, one smallest instance, `totative.dev` as the primary domain.
+Licensed under the Apache License 2.0. See [LICENSE](LICENSE).
