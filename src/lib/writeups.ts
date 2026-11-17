@@ -8,8 +8,7 @@ export interface Writeup {
   minutes: number
 }
 
-// Posts keep their Jekyll file names (`YYYY-MM-DD-slug.md`), so the existing
-// `_posts/` folder moves over unchanged and the date stays out of frontmatter.
+// Date lives in the file name (YYYY-MM-DD-slug.md), not frontmatter.
 const NAME = /(\d{4}-\d{2}-\d{2})-([^/]+)\.md$/
 const WORDS = /\s+/
 const WORDS_PER_MINUTE = 220
