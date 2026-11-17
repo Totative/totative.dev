@@ -1,0 +1,4 @@
+{
+  // Host `uv` runs scripts/scan_runtime.py; it is not an npm package.
+  "ignoreBinaries": ["uv"]
+}

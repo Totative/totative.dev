@@ -1,5 +1,5 @@
 // Copy is taken as written from the current site, the organisation profile and
-// the three library READMEs. The `html` fields carry inline markup from those sources.
+// the three library READMEs.
 
 export const siteName = 'Totative'
 
@@ -35,11 +35,10 @@ interface ToolFacts {
   version: string
 }
 
-const tool = (name: string, text: string, facts: ToolFacts) => {
+const tool = (name: string, facts: ToolFacts) => {
   const tarball = `${name}-${facts.version}.tar.gz`
   return {
     name,
-    text,
     ...facts,
     href: `https://github.com/Totative/${name}`,
     release: `https://github.com/Totative/${name}/releases/tag/${facts.version}`,
@@ -52,25 +51,17 @@ const tool = (name: string, text: string, facts: ToolFacts) => {
 }
 
 export const tools = [
-  tool(
-    'go-avscan',
-    'asks the machine’s antivirus about a folder: AMSI, clamd, or a command you name.',
-    {
-      summary:
-        'Asks the machine’s antivirus about a folder of files: Windows AMSI, a clamd daemon, or a command you name.',
-      version: 'v0.4.0',
-    },
-  ),
-  tool(
-    'go-keyring',
-    'one credential store for a Go desktop app, with a sealed-file fallback inside Flatpak.',
-    {
-      summary:
-        'One credential store for a Go desktop app: the OS keyring, with a sealed-file fallback inside a Flatpak.',
-      version: 'v0.3.0',
-    },
-  ),
-  tool('go-codepair', 'pairs two devices on a LAN with a short typed code.', {
+  tool('go-avscan', {
+    summary:
+      'Asks the machine’s antivirus about a folder of files: Windows AMSI, a clamd daemon, or a command you name.',
+    version: 'v0.4.0',
+  }),
+  tool('go-keyring', {
+    summary:
+      'One credential store for a Go desktop app: the OS keyring, with a sealed-file fallback inside a Flatpak.',
+    version: 'v0.3.0',
+  }),
+  tool('go-codepair', {
     summary:
       'Pair two devices on a LAN with a short human-typed code and an authenticated key exchange.',
     version: 'v0.3.0',
