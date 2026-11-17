@@ -2,4 +2,4 @@
 run = '[ -n "$CI" ] || gitleaks git --redact --no-banner --log-level warn'
 
 [gates.vuln]
-run = "bun /usr/local/src/com.github/Rethunk-Tech/gh-actions/audit-bun/audit.ts"
+run = '[ -n "$CI" ] || bun /usr/local/src/com.github/Rethunk-Tech/gh-actions/audit-bun/audit.ts'
