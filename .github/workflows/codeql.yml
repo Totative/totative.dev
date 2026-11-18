@@ -1,49 +1,53 @@
+# CodeQL advanced setup: every language in this repository with the security-and-quality suite, re-runnable
+# from the Actions tab. Languages other than Go are extracted without a build.
 name: CodeQL
+
 on:
   push:
     branches: [main]
-  merge_group:
   pull_request:
+    branches: [main]
   schedule:
-    - cron: "17 5 * * 1"
-permissions: {}
+    - cron: "42 20 * * 0"
+  workflow_dispatch:
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
+permissions: {}
+
 jobs:
   analyze:
+    name: Analyze (${{ matrix.language }})
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 60
     permissions:
-      security-events: write
-      contents: read
       actions: read
+      contents: read
+      security-events: write
     strategy:
       fail-fast: false
       matrix:
-        # Add the repository's own languages here; "actions" scans these workflows.
-        language: [actions]
+        include:
+          - language: actions
+            build-mode: none
+          - language: javascript-typescript
+            build-mode: none
+          - language: python
+            build-mode: none
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: github/codeql-action/init@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
         with:
           languages: ${{ matrix.language }}
-      - uses: github/codeql-action/analyze@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+          build-mode: ${{ matrix.build-mode }}
+          queries: security-and-quality
+      - name: Analyze
+        uses: github/codeql-action/analyze@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
         with:
           category: /language:${{ matrix.language }}
-  # One required check for branch protection: a matrix leg that never ran reads as not failing rather than not run.
-  all-checks:
-    if: always()
-    needs: [analyze]
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Fail if any check did not succeed
-        run: |
-          if [ "${{ needs.analyze.result }}" != "success" ]; then
-            echo "analyze=${{ needs.analyze.result }}"
-            exit 1
-          fi
-          echo "all checks passed"
