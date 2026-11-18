@@ -6,6 +6,7 @@ on:
   pull_request:
   schedule:
     - cron: "17 5 * * 1"
+  workflow_dispatch:
 permissions: {}
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -21,8 +22,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Add the repository's own languages here; "actions" scans these workflows.
-        language: [actions]
+        include:
+          - language: actions
+            build-mode: none
+          - language: javascript-typescript
+            build-mode: none
+          - language: python
+            build-mode: none
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -30,6 +36,8 @@ jobs:
       - uses: github/codeql-action/init@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
         with:
           languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          queries: security-and-quality
       - uses: github/codeql-action/analyze@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
         with:
           category: /language:${{ matrix.language }}

@@ -93,6 +93,8 @@
         "noTernary": "off",
         // canon ts-biome-00035
         "useExportsLast": "off",
+        // canon ts-biome-00035
+        "noMagicNumbers": "off",
 
         // canon ts-biome-00007
         "noExcessiveLinesPerFile": {
@@ -184,6 +186,8 @@
       },
 
       "suspicious": {
+        // canon ts-biome-00035
+        "noBitwiseOperators": "off",
         // canon ts-biome-00021
         "noExplicitAny": "error",
         // canon ts-biome-00005
