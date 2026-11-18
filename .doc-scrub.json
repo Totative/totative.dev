@@ -1,0 +1,3 @@
+{
+  "skip_paths": ["scripts/scan_runtime.py", "src/lib/writeups.ts"]
+}
