@@ -16,7 +16,9 @@
         "td",
         "picture",
         "source",
-        "img"
+        "img",
+        "h1",
+        "div"
       ]
     },
     "MD041": false
