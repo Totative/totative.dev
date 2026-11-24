@@ -148,15 +148,23 @@
   margin-bottom: 4px;
 }
 
-.tools h3 a:first-child,
-.posts h2 a,
-.posts h3 a {
+.foot nav a {
+  color: var(--soft);
   text-decoration: none;
 }
 
-.tools h3 a:first-child:hover,
+.posts h2 a,
+.posts h3 a,
+.tools h3 a:first-child {
+  text-decoration: none;
+}
+
+.foot nav a:hover {
+  color: var(--ink);
+}
 .posts h2 a:hover,
-.posts h3 a:hover {
+.posts h3 a:hover,
+.tools h3 a:first-child:hover {
   text-decoration: underline;
   text-decoration-color: var(--accent);
 }
@@ -282,13 +290,4 @@
   flex-wrap: wrap;
   gap: 8px 28px;
   margin-top: 20px;
-}
-
-.foot nav a {
-  color: var(--soft);
-  text-decoration: none;
-}
-
-.foot nav a:hover {
-  color: var(--ink);
 }
