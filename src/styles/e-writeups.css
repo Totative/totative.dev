@@ -26,6 +26,16 @@
   text-decoration: none;
 }
 
+.contents a {
+  display: block;
+  padding: 5px 0 5px 14px;
+  border-left: 1px solid var(--line);
+  color: var(--muted);
+  line-height: 1.35;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
 .crumb a:hover {
   color: var(--ink);
 }
@@ -74,16 +84,6 @@
   color: var(--muted);
 }
 
-.contents a {
-  display: block;
-  padding: 5px 0 5px 14px;
-  border-left: 1px solid var(--line);
-  color: var(--muted);
-  line-height: 1.35;
-  text-decoration: none;
-  transition: color 0.15s;
-}
-
 .contents a:hover {
   color: var(--ink);
 }
@@ -119,8 +119,8 @@
   transition: opacity 0.15s;
 }
 
-h2:hover .anchor,
-.anchor:focus-visible {
+.anchor:focus-visible,
+h2:hover .anchor {
   opacity: 1;
 }
 
